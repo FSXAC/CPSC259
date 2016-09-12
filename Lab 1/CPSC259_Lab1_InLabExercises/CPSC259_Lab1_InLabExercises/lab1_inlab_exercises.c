@@ -17,7 +17,7 @@
  because it is easier to debug code that doesn't use them.
  Define and use a constant like this instead: #define CONSTANT_NAME value
  */
-#define SOME_CONSTANT 10
+#define SOME_CONSTANT 100
 
 /*
  Main function drives the program.  Every C program must have one and
@@ -56,6 +56,14 @@ int main (void)
 void reverse_array(int array[], int length) {
 	
 	// Implement this function here
+	int temp;
+	int index = 0;
+
+	for ( ; index < length / 2; index++) {
+		temp = array[index];
+		array[index] = array[length - index - 1];
+		array[length - index - 1] = temp;
+	}
 }
 
 /*
@@ -70,7 +78,12 @@ void reverse_array(int array[], int length) {
 int length(const char string[])
 {
 	// Replace this return statement with your own implementation
-	return -1;
+	int index = 0;
+	while (string[index] != '\0') {
+		index++;
+	}
+
+	return index;
 }
 
 /*
@@ -86,7 +99,15 @@ int length(const char string[])
 int count_letters(const char string[], char letter)
 {
 	// Replace this return statement with your own implementation
-	return -1;
+	int occurance = 0;
+	int index = 0;
+	for (; index < length(string); index++) {
+		if (string[index] == letter) {
+			occurance++;
+		}
+	}
+
+	return occurance;
 }
 
 /*
@@ -106,15 +127,14 @@ int count_letters(const char string[], char letter)
 		 ELSE IF string is not a palindrome THEN 0
  */
 int is_palindrome(const char string[]) {
-
-
-	// This implementation is only partly correct
-	int string_length = length(string);
-	int i = 0, j = string_length - 1;
-	for (i = 0; i < j; ++i, --j){
-		if ( string[i] != string[j]) {
+	int i = 0, j = length(string);
+	for (; i < j; i++, j--) {
+		while (string[i] == ' ') i++;
+		while (string[j] == ' ') j--;
+		if (string[i] != string[j]) {
 			return 0;
 		}
-    }
+	}
+
     return 1;
 }

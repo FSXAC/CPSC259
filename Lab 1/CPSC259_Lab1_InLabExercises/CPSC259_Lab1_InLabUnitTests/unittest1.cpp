@@ -31,7 +31,7 @@ namespace CPSC259_2013W2_Lab1_InLabUnitTests
 			int i = 0;
 			reverse_array(reversedarray, array_length);
 			for (i = 0; i < array_length; ++i) {
-				Assert::AreEqual(array[i], reversedarray[ i]);
+				Assert::AreEqual(array[i], reversedarray[i]);
 			}
 		}
 
