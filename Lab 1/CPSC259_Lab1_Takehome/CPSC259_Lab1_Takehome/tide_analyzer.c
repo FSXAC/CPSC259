@@ -163,6 +163,9 @@ void process_file( double array_to_populate[], FILE * pointer_to_data_file )
 		values_per_line = sscanf_s(line_buffer, "%d", "%d", "%d", "%d", "%d",
 			extracted_values[0], extracted_values[1], extracted_values[2], extracted_values[3], extracted_values[4]);
 
+		for (i = 0; i < MAX_VALUES_PER_LINE; i++) {
+			values_per_line += sscanf_s(line_buffer, "%d", extracted_values[i]);
+		}
 
 		/* Copies the extracted integers to our data array.  Use a for loop for each
 		 for each of the values_per_line cells in the local array, and add the value
