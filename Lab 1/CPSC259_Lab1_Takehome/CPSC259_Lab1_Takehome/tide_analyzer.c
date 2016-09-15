@@ -79,9 +79,8 @@ int main (void)
     process_file(readings, file_pointer);
 
     /* If the file pointer does not equal NULL THEN closes the pointer */
-    if (file_pointer == NULL) {
-        printf("Analysis incomplete, file not found\n");
-        return 1;
+    if (file_pointer != NULL) {
+        fclose(file_pointer);
     }
 
     /* Performs the Fourier transformation by passing the data readings, the complex result
