@@ -129,13 +129,15 @@ int main (void)
     }
 
     /* Creates (opens) a result file using fopen_s */
-    //fopen_s...
+    fopen_s(file_pointer, RESULT_FILE_NAME, "w");
 
     /* Writes the result to the file */
-    // fprintf( file_pointer, ...
+    fprintf(file_pointer, "Puddlejump tidal frequency: %.2f per day", frequency);
 
     /* Closes the result file */
-    // if (file_pointer ...
+    if (file_pointer != NULL) {
+        fclose(file_pointer);
+    }
 
     /* And that's it */
     printf("Analysis complete, result.txt created\n");

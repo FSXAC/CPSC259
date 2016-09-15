@@ -26,6 +26,9 @@
     <Text Include="puddlejump.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="result.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="discrete_fourier_transform.c">
