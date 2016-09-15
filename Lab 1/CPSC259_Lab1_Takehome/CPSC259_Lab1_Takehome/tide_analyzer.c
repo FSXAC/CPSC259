@@ -20,6 +20,7 @@
  Comments that start with // should be replaced with code
  Comments that are surrounded by * are hints
  ******************************************************************/
+#define _CRT_SECURE_NO_WARNINGS
 
 /* Preprocessor directives */	
 #include <stdio.h>
@@ -73,7 +74,8 @@ int main (void)
 
     /* Opens the file (a text file, not a binary file) for reading, and not writing,
      by invoking the fopen_s function with the correct parameters. */
-    fopen_s(file_pointer, FILE_NAME, "r");
+    //fopen_s(file_pointer, FILE_NAME, "r");
+    file_pointer = fopen(FILE_NAME, "r");
 
     /* Invokes the process file function, passing the the data readings array and the file pointer */
     process_file(readings, file_pointer);
@@ -168,7 +170,7 @@ void process_file( double array_to_populate[], FILE * pointer_to_data_file )
         /* Tries to extract MAX_VALUES_PER_LINE ints from the line buffer and assign
          them to local array cells using sscanf_s or equivalent.  Stores the return
          value in a local int */
-        values_per_line = sscanf_s(line_buffer, "%d", "%d", "%d", "%d", "%d", extracted_values[0], extracted_values[1], extracted_values[2], extracted_values[3], extracted_values[4]);
+        values_per_line = sscanf(line_buffer, "%d %d %d %d %d", &extracted_values[0], &extracted_values[1], &extracted_values[2], &extracted_values[3], &extracted_values[4]);
 
         /*for (i = 0; i < MAX_VALUES_PER_LINE; i++) {
             values_per_line += sscanf_s(line_buffer, "%d", extracted_values[i]);
