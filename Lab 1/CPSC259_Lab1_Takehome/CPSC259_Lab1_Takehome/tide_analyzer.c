@@ -80,7 +80,7 @@ int main (void)
 
 	/* If the file pointer does not equal NULL THEN closes the pointer */
 	// if (file_pointer != ...
-
+	if (file_pointer != NULL) {
 	/* Performs the Fourier transformation by passing the data readings, the complex result
 	 array, and two other parameters to the fft function. Since arrays are pass by reference
 	 and not pass by value, the function will be able to directly change the values in the
