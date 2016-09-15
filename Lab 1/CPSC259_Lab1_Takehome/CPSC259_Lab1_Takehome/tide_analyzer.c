@@ -79,22 +79,26 @@ int main (void)
     process_file(readings, file_pointer);
 
     /* If the file pointer does not equal NULL THEN closes the pointer */
-    // if (file_pointer != ...
-    if (file_pointer != NULL) {
-        /* Performs the Fourier transformation by passing the data readings, the complex result
-         array, and two other parameters to the fft function. Since arrays are pass by reference
-         and not pass by value, the function will be able to directly change the values in the
-         cells.  Contrast this with the idea of pass by value, where we pass the value of a
-         variable and if we change this value, the original variable remains unchanged. */
+    if (file_pointer == NULL) {
+        printf("Analysis incomplete, file not found\n");
+        return 1;
     }
+
+    /* Performs the Fourier transformation by passing the data readings, the complex result
+    array, and two other parameters to the fft function. Since arrays are pass by reference
+    and not pass by value, the function will be able to directly change the values in the
+    cells.  Contrast this with the idea of pass by value, where we pass the value of a
+    variable and if we change this value, the original variable remains unchanged. */
+    fft(1, 17, readings, complex_component);
 
     /* Since the Microsoft Visual Studio 2012 compiler doesn't support complex
      numbers without some tweaking, let's square the real and the complex components,
      add them, and take the square root.  Iterate through the elements of the readings
      array and change each readings[i] to equal (readings[i]^2 + complex_component[i]^2)^(1/2)
      */
-    // for (i = 0...
-    // 	readings[i] = ...
+    for (i = 0; i < NUMBER_OF_READINGS; i++) {
+        readings[i] = sqrt(pow(readings[i], 2) + pow(complex_component[i], 2));
+    }
 
     /*
      Searches through the results for the tidal frequency with the greatest amplitude.
