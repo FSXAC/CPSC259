@@ -81,12 +81,12 @@ int main (void)
 	/* If the file pointer does not equal NULL THEN closes the pointer */
 	// if (file_pointer != ...
 	if (file_pointer != NULL) {
-	/* Performs the Fourier transformation by passing the data readings, the complex result
-	 array, and two other parameters to the fft function. Since arrays are pass by reference
-	 and not pass by value, the function will be able to directly change the values in the
-	 cells.  Contrast this with the idea of pass by value, where we pass the value of a
-	 variable and if we change this value, the original variable remains unchanged. */
-	// fft(...
+		/* Performs the Fourier transformation by passing the data readings, the complex result
+		 array, and two other parameters to the fft function. Since arrays are pass by reference
+		 and not pass by value, the function will be able to directly change the values in the
+		 cells.  Contrast this with the idea of pass by value, where we pass the value of a
+		 variable and if we change this value, the original variable remains unchanged. */
+	}
 
 	/* Since the Microsoft Visual Studio 2012 compiler doesn't support complex
 	 numbers without some tweaking, let's square the real and the complex components,
@@ -154,12 +154,14 @@ void process_file( double array_to_populate[], FILE * pointer_to_data_file )
 	int i                  = 0;
 
 	/* Copies the file, line by line, to line buffer using fgets in a while loop */
-	// while( fgets ( line_buffer, LINESIZE, pointer_to_data_file ) ) {
+	while(fgets(line_buffer, LINESIZE, pointer_to_data_file)) {
 
 		/* Tries to extract MAX_VALUES_PER_LINE ints from the line buffer and assign
 		 them to local array cells using sscanf_s or equivalent.  Stores the return
 		 value in a local int */
 		// values_per_line = ...
+		values_per_line = sscanf_s(line_buffer, "%d", "%d", "%d", "%d", "%d",
+			extracted_values[0], extracted_values[1], extracted_values[2], extracted_values[3], extracted_values[4]);
 
 
 		/* Copies the extracted integers to our data array.  Use a for loop for each
