@@ -7,10 +7,10 @@
                     corresponds to the name defined in the preprocessor
                     directive.  It is a series of NUMBER_OF_READINGS tidal
                     readings (in mm) taken hourly.
- Author:			Your names
- Student #s:		12345678 and 12345678
- CS Accounts:		a1a1 and b2b2
- Date:				Add the date here
+ Author:			Mansur He
+ Student #s:		44638154
+ CS Accounts:		p5h0b
+ Date:				2016-09-14
  */
  
 /******************************************************************
@@ -67,15 +67,16 @@ int main (void)
 	 it will give us the wrong frequencies. Remember we're mixing ints and doubles here, and we want
 	 the results to be doubles, so you need to do some casting.
 	 */
-	// for ( i = 0...
-	//	omega[i] = ...
+	for (i = 0; i < NUMBER_OF_READINGS; i++){
+		omega[i] = i * ((double)SAMPLING_FREQUENCY) / (NUMBER_OF_READINGS);
+	}
 
 	/* Opens the file (a text file, not a binary file) for reading, and not writing,
 	 by invoking the fopen_s function with the correct parameters. */
-	// fopen_s...
+	fopen_s(file_pointer, FILE_NAME, "r");
 
 	/* Invokes the process file function, passing the the data readings array and the file pointer */
-	// process_file(...
+	process_file(readings, file_pointer);
 
 	/* If the file pointer does not equal NULL THEN closes the pointer */
 	// if (file_pointer != ...
