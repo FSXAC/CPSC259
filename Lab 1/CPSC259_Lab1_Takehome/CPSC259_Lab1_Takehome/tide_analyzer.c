@@ -79,9 +79,7 @@ int main (void)
     process_file(readings, file_pointer);
 
     /* If the file pointer does not equal NULL THEN closes the pointer */
-    if (file_pointer != NULL) {
-        fclose(file_pointer);
-    }
+    if (file_pointer != NULL) fclose(file_pointer);
 
     /* Performs the Fourier transformation by passing the data readings, the complex result
     array, and two other parameters to the fft function. Since arrays are pass by reference
@@ -113,12 +111,20 @@ int main (void)
      If it is, store both the frequency and the amplitude.
      */
     // for (i = 0...
+    for (i = 0; i < NUMBER_OF_READINGS / 2; i++) {
+        if (omega[i] >= NOISE_FILTER) {
+            if (readings[i] > amplitude) {
+                amplitude = readings[i];
+                frequency = omega[i];
 
-    /* You can use this for debugging, or (even better) you can set a breakpoint
-     on this line, and look at the values of frequency and amplitude using
-     the debugger
-     */
-    // printf("Max Frequency = %f Max Amplitude = %f\n", frequency, amplitude);
+                /* You can use this for debugging, or (even better) you can set a breakpoint
+                on this line, and look at the values of frequency and amplitude using
+                the debugger
+                */
+                printf("Max Frequency = %f Max Amplitude = %f\n", frequency, amplitude);
+            }
+        }
+    }
 
     /* Creates (opens) a result file using fopen_s */
     //fopen_s...
@@ -157,7 +163,7 @@ void process_file( double array_to_populate[], FILE * pointer_to_data_file )
     int i                  = 0;
 
     /* Copies the file, line by line, to line buffer using fgets in a while loop */
-    while(fgets(line_buffer, LINESIZE, pointer_to_data_file)) {
+    while (fgets(line_buffer, LINESIZE, pointer_to_data_file)) {
 
         /* Tries to extract MAX_VALUES_PER_LINE ints from the line buffer and assign
          them to local array cells using sscanf_s or equivalent.  Stores the return
@@ -166,7 +172,7 @@ void process_file( double array_to_populate[], FILE * pointer_to_data_file )
 
         /*for (i = 0; i < MAX_VALUES_PER_LINE; i++) {
             values_per_line += sscanf_s(line_buffer, "%d", extracted_values[i]);
-        }*/
+            }*/
 
         /* Copies the extracted integers to our data array.  Use a for loop for each
          for each of the values_per_line cells in the local array, and add the value
@@ -178,7 +184,7 @@ void process_file( double array_to_populate[], FILE * pointer_to_data_file )
         /* Keep track of what has been processed.  Increment the number of readings processed
          by the number of values successfully extracted from the line in the file. */
         readings_processed += values_per_line;
-
+    }
     
     /* End of function */
     return;
