@@ -7,9 +7,9 @@
                     corresponds to the name defined in the preprocessor
                     directive.  It is a series of NUMBER_OF_READINGS tidal
                     readings (in mm) taken hourly.
- Author:			Mansur He
- Student #s:		44638154
- CS Accounts:		p5h0b
+ Author:			Mansur (Muchen) He, Shariful Alam Arnob
+ Student #s:		44638154, 20293156
+ CS Accounts:		p5h0b, r9t0b
  Date:				2016-09-14
  */
  
@@ -20,7 +20,6 @@
  Comments that start with // should be replaced with code
  Comments that are surrounded by * are hints
  ******************************************************************/
-#define _CRT_SECURE_NO_WARNINGS
 
 /* Preprocessor directives */	
 #include <stdio.h>
@@ -75,7 +74,7 @@ int main (void)
     /* Opens the file (a text file, not a binary file) for reading, and not writing,
      by invoking the fopen_s function with the correct parameters. */
     //fopen_s(file_pointer, FILE_NAME, "r");
-    file_pointer = fopen(FILE_NAME, "r");
+    fopen_s(&file_pointer, FILE_NAME, "r");
 
     /* Invokes the process file function, passing the the data readings array and the file pointer */
     process_file(readings, file_pointer);
@@ -173,10 +172,6 @@ void process_file( double array_to_populate[], FILE * pointer_to_data_file )
          them to local array cells using sscanf_s or equivalent.  Stores the return
          value in a local int */
         values_per_line = sscanf_s(line_buffer, "%d %d %d %d %d", &extracted_values[0], &extracted_values[1], &extracted_values[2], &extracted_values[3], &extracted_values[4]);
-
-        /*for (i = 0; i < MAX_VALUES_PER_LINE; i++) {
-            values_per_line += sscanf_s(line_buffer, "%d", extracted_values[i]);
-            }*/
 
         /* Copies the extracted integers to our data array.  Use a for loop for each
          for each of the values_per_line cells in the local array, and add the value
