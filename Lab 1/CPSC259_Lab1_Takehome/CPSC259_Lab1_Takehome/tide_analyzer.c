@@ -172,7 +172,7 @@ void process_file( double array_to_populate[], FILE * pointer_to_data_file )
         /* Tries to extract MAX_VALUES_PER_LINE ints from the line buffer and assign
          them to local array cells using sscanf_s or equivalent.  Stores the return
          value in a local int */
-        values_per_line = sscanf(line_buffer, "%d %d %d %d %d", &extracted_values[0], &extracted_values[1], &extracted_values[2], &extracted_values[3], &extracted_values[4]);
+        values_per_line = sscanf_s(line_buffer, "%d %d %d %d %d", &extracted_values[0], &extracted_values[1], &extracted_values[2], &extracted_values[3], &extracted_values[4]);
 
         /*for (i = 0; i < MAX_VALUES_PER_LINE; i++) {
             values_per_line += sscanf_s(line_buffer, "%d", extracted_values[i]);
