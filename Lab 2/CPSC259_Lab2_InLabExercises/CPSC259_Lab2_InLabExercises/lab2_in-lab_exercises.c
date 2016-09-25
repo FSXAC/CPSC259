@@ -144,6 +144,23 @@ int contains_sample( char * candidate, char * sample )
  */
 int find_index( char * candidate, char * sample )
 {
-	// Replace this return statement with your code
-	return -2;
+    // basically the same as before
+
+    int index = 0;
+    int subindex = 0;
+
+    // check if both is empty string
+    if (*candidate == '\0' || *sample == '\0') return 0;
+
+    while (*(candidate + index) != '\0') {
+        if (*(candidate + index++) != *(sample + subindex++)) {
+            subindex = 0;
+        }
+
+        // reached the end of sample char array without resetting
+        if (*(sample + subindex) == '\0') {
+            return (index - subindex);
+        }
+    }
+	return -1;
 }
