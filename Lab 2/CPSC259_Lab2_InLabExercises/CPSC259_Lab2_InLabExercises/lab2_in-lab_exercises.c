@@ -74,7 +74,21 @@ void swap_ints( int * first_int, int * second_int )
  */
 void reverse_string( char * string )
 {
-	// Insert your code here
+    int length = 0;
+    int index = 0;
+    char temp;
+
+    // get the length of the string first
+    while ((*(string + length) != '\0')) {
+        length++;
+    }
+
+    // use for loop to reverse
+    for (; index < length / 2; index++) {
+        temp = *(string + index);
+        *(string + index) = *(string + length - index - 1);
+        *(string + length - index - 1) = temp;
+    }
 }
 
 /* 
