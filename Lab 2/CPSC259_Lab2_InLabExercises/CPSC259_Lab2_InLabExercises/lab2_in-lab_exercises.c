@@ -107,8 +107,23 @@ void reverse_string( char * string )
  */
 int contains_sample( char * candidate, char * sample )
 {
-	// Replace this return statement with your code
-	return -1;
+    int index = 0;
+    int subindex = 0;
+
+    // check if both is empty string
+    if (*candidate == '\0' && *sample == '\0') return 1;
+
+    while (*(candidate + index) != '\0') {
+        if (*(candidate + index++) != *(sample + subindex++)) {
+            subindex = 0;
+        }
+
+        // reached the end of sample char array without resetting
+        if (*(sample + subindex) == '\0') {
+            return 1;
+        }
+    }
+    return 0;
 }
 
 /* 
