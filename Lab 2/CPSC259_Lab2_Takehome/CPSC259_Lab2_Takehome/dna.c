@@ -462,7 +462,10 @@ void analyze_segments( char * sample_segment, char ** candidate_segments, int nu
 	/* Hint: Check to see if any candidate segment(s) are a perfect match, and report them
 	   (REMEMBER: don't ignore trailing nucleotides when searching for a perfect score) */
 	
-	// Insert your code here
+	// ********JUST******** get the perfect matches
+    for (; i < number_of_candidates; i++) {
+        if (contains_sample(*sample_segment, **candidate_segments));
+    }
 
 	/* Hint: Return early if we have found and reported perfect match(es) */
 	
@@ -520,4 +523,40 @@ int calculate_score( char * sample_segment, char * candidate_segment)
 
 	// Insert your code here (replace this return statement with your own code)
 	return 0;
+}
+
+/*
+* Let's see how well you read the lab document.
+*
+* Determines if candidate contains sample, and returns
+* 1 if  it does, and 0 if it does not.
+*
+* PARAM:     candidate is a pointer to an array of char (a string)
+* PARAM:     sample is a pointer to an array of char (a string)
+* PRE:       the arrays of char terminate with a null '\0'
+* PRE:       candidate != NULL; sample != NULL
+* POST:      N/A
+* RETURN:    IF candidate contains sample THEN 1
+*            ELSE 0.
+*/
+int contains_sample(char * sample, char * candidate)
+{
+    int index = 0;
+    int subindex = 0;
+
+    // check if both is empty string
+    if (*candidate == '\0' && *sample == '\0') return 1;
+
+    // continue checking if they are non empty strings
+    while (*(candidate + index) != '\0') {
+        if (*(candidate + index++) != *(sample + subindex++)) {
+            subindex = 0;
+        }
+
+        // reached the end of sample char array without resetting
+        if (*(sample + subindex) == '\0') {
+            return 1;
+        }
+    }
+    return 0;
 }

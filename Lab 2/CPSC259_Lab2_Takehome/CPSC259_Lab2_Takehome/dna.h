@@ -44,6 +44,7 @@ void   get_user_input   ( char * message, char * response );
 int    extract_dna      ( FILE * file_pointer, char ** sample_segment, char *** candidate_segments );
 void   analyze_segments ( char * sample_segment, char ** candidate_segments, int number_of_candidates );
 int    calculate_score  ( char * sample_segment, char * candidate_segment );
+int    contains_sample  ( char * sample, char * candidate);
 
 char codon_codes[NUMBER_OF_CODONS][CODON_SYMBOL_LENGTH] =
 	{ "TTT", "TTC", "TTA", "TTG", "CTT", "CTC",
