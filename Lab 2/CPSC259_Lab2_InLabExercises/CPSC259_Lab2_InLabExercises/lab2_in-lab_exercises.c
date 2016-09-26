@@ -1,10 +1,11 @@
 /*
- File:				lab2_in-lab_exercises.c
- Purpose:			Exercises for lab 2
- Author:			Your names
- Student #s:		12345678 and 12345678
- CS Accounts:		a1a1 and b2b2
- Date:				Add the date here
+
+File:				lab2_in-lab_exercises.c
+Purpose:			Exercises for lab 2
+Author:			Your names
+Student #s:		12345678 and 12345678
+CS Accounts:		a1a1 and b2b2
+Date:				Add the date here
  */
 
 #include "lab2_in-lab_exercises.h"
@@ -13,12 +14,12 @@
 #define SMALL_ARRAY 25
 
 /*
- Main function drives the program.  Every C program must have one
- main function.  A project will not compile without one.
- PRE:    NULL (no pre-conditions)
- POST:	 NULL (no side-effects)
- RETURN: IF the program exits correctly
-		 THEN 0 ELSE 1
+   Main function drives the program.  Every C program must have one
+   main function.  A project will not compile without one.
+PRE:    NULL (no pre-conditions)
+POST:	 NULL (no side-effects)
+RETURN: IF the program exits correctly
+THEN 0 ELSE 1
  */
 int main ( void )
 {
@@ -55,9 +56,9 @@ int main ( void )
 void swap_ints( int * first_int, int * second_int )
 {
 	// Insert your code here
-    int temporary = *first_int;
-    *first_int = *second_int;
-    *second_int = temporary;
+	int temporary = *first_int;
+	*first_int = *second_int;
+	*second_int = temporary;
 }
 
 /* 
@@ -74,21 +75,21 @@ void swap_ints( int * first_int, int * second_int )
  */
 void reverse_string( char * string )
 {
-    int length = 0;
-    int index = 0;
-    char temp;
+	int length = 0;
+	int index = 0;
+	char temp;
 
-    // get the length of the string first
-    while ((*(string + length) != '\0')) {
-        length++;
-    }
+	// get the length of the string first
+	while ((*(string + length) != '\0')) {
+		length++;
+	}
 
-    // use for loop to reverse
-    for (; index < length / 2; index++) {
-        temp = *(string + index);
-        *(string + index) = *(string + length - index - 1);
-        *(string + length - index - 1) = temp;
-    }
+	// use for loop to reverse
+	for (; index < length / 2; index++) {
+		temp = *(string + index);
+		*(string + index) = *(string + length - index - 1);
+		*(string + length - index - 1) = temp;
+	}
 }
 
 /* 
@@ -107,23 +108,24 @@ void reverse_string( char * string )
  */
 int contains_sample( char * candidate, char * sample )
 {
-    int index = 0;
-    int subindex = 0;
+	int index = 0;
+	int subindex = 0;
 
-    // check if both is empty string
-    if (*candidate == '\0' && *sample == '\0') return 1;
+	// check if both is empty string
+	if (*candidate == '\0' && *sample == '\0') return 1;
 
-    while (*(candidate + index) != '\0') {
-        if (*(candidate + index++) != *(sample + subindex++)) {
-            subindex = 0;
-        }
+	// continue checking if they are non empty strings
+	while (*(candidate + index) != '\0') {
+		if (*(candidate + index++) != *(sample + subindex++)) {
+			subindex = 0;
+		}
 
-        // reached the end of sample char array without resetting
-        if (*(sample + subindex) == '\0') {
-            return 1;
-        }
-    }
-    return 0;
+		// reached the end of sample char array without resetting
+		if (*(sample + subindex) == '\0') {
+			return 1;
+		}
+	}
+	return 0;
 }
 
 /* 
@@ -144,23 +146,23 @@ int contains_sample( char * candidate, char * sample )
  */
 int find_index( char * candidate, char * sample )
 {
-    // basically the same as before
+	// basically the same as before
 
-    int index = 0;
-    int subindex = 0;
+	int index = 0;
+	int subindex = 0;
 
-    // check if both is empty string
-    if (*candidate == '\0' || *sample == '\0') return 0;
+	// check if both is empty string
+	if (*candidate == '\0' || *sample == '\0') return 0;
 
-    while (*(candidate + index) != '\0') {
-        if (*(candidate + index++) != *(sample + subindex++)) {
-            subindex = 0;
-        }
+	while (*(candidate + index) != '\0') {
+		if (*(candidate + index++) != *(sample + subindex++)) {
+			subindex = 0;
+		}
 
-        // reached the end of sample char array without resetting
-        if (*(sample + subindex) == '\0') {
-            return (index - subindex);
-        }
-    }
+		// reached the end of sample char array without resetting
+		if (*(sample + subindex) == '\0') {
+			return (index - subindex);
+		}
+	}
 	return -1;
 }
