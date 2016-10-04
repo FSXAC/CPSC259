@@ -464,31 +464,20 @@ void analyze_segments( char * sample_segment, char ** candidate_segments, int nu
 
 	/* Hint: Check to see if any candidate segment(s) are a perfect match, and report them
 	   (REMEMBER: don't ignore trailing nucleotides when searching for a perfect score) */
-
-    printf("candidate segment: %d\n", candidate_segments);
-    printf("*candidate segment: %d\n", *candidate_segments);
-    printf("**candidate segment: %c\n", **candidate_segments);
-	
-	// ********JUST******** get the perfect matches
-    for (; i < number_of_candidates; i++) {
-        // continue checking if they are non empty strings
-        while (*(candidate_segments + index) != '\0') {
-            if (*(candidate_segments + index++) != *(sample_segment + subindex++)) {
-                subindex = 0;
-            }
-
-            // reached the end of sample char array without resetting
-            if (*(sample_segment + subindex) == '\0') {
-                printf("HEYYYYYYYYYY");
-            }
+    
+    do {
+        sample_length = strlen(sample_segment);
+        candidate_length = strlen(*(candidate_segments + i));
+        if (sample_length == candidate_length && !strcmp(sample_segment, *candidate_segments)) {
+            has_perfect_match = 1;
+            printf("Candidate number %d is a perfect match. GO CATCH HIM!!!!\n", i + 1);
         }
-    }
+    } while (++i < number_of_candidates);
 
-	/* Hint: Return early if we have found and reported perfect match(es) */
-	
-	// Insert your code here
+    /* Hint: Return early if we have found and reported perfect match(es) */
+    if (has_perfect_match) return;
 
-	/* Hint: sOtherwise we need to calculate and print all of the scores by invoking
+	/* Hint: Otherwise we need to calculate and print all of the scores by invoking
 	   calculate_score for each candidate_segment and printing each result */
 	for (i = 0; i < number_of_candidates; ++i) {
 		
@@ -535,9 +524,9 @@ int calculate_score( char * sample_segment, char * candidate_segment)
 	int score      = 0;
     int iterations = 0;
 	int sample_length    = strlen( sample_segment );
-	int candidate_length = strlen( candidate_segment );
+    int candidate_length = strlen( candidate_segment );
 	int sample_length_in_codons = sample_length / 3;
-
+    
 	// Insert your code here (replace this return statement with your own code)
 	return 0;
 }
