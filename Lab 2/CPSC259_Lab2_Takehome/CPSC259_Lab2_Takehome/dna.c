@@ -479,9 +479,12 @@ void analyze_segments( char * sample_segment, char ** candidate_segments, int nu
 
 	/* Hint: Otherwise we need to calculate and print all of the scores by invoking
 	   calculate_score for each candidate_segment and printing each result */
+    
 	for (i = 0; i < number_of_candidates; ++i) {
 		
 		// Insert your code here - maybe a call to calculate_score?
+        printf("Candidate number %d matches with a score of %d\n", i + 1,
+            calculate_score(sample_segment, *candidate_segments + i));
 	}
 
 	/* End of function */
@@ -525,8 +528,41 @@ int calculate_score( char * sample_segment, char * candidate_segment)
     int iterations = 0;
 	int sample_length    = strlen( sample_segment );
     int candidate_length = strlen( candidate_segment );
-	int sample_length_in_codons = sample_length / 3;
+	int sample_length_in_codons = sample_length / 3;     // number of codons in sample
+
+    // looping
+    int iteration, codon;
     
 	// Insert your code here (replace this return statement with your own code)
+    iterations = (candidate_length - sample_length) / CODON_LENGTH + 1;
+
+    // Go through both segments by shifting one codon at a time
+    for (iteration = 0; iteration < iterations; iteration++) {
+
+        // reset score for next iteration
+        temp_score = 0;
+        
+        for (codon = 0; codon < sample_length_in_codons; codon++) {
+
+            // compare codon match
+            if (!strncmp(
+                *(sample_segment + (codon * CODON_LENGTH)),
+                *(candidate_segment + (codon + iteration) * CODON_LENGTH),
+                CODON_LENGTH
+                )) {
+                
+                // match
+                temp_score += 10;
+                continue;
+            }
+
+            // compare amino acids
+            if (!strncmp(
+                *(codon_names[get_codon_index(*(sample_segment + (codon * CODON_LENGTH)))]),
+
+                ))
+        }
+    }
+
 	return 0;
 }
