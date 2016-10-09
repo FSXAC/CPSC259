@@ -550,17 +550,22 @@ int calculate_score( char * sample_segment, char * candidate_segment)
                 *(candidate_segment + (codon + iteration) * CODON_LENGTH),
                 CODON_LENGTH
                 )) {
-                
-                // match
+
                 temp_score += 10;
                 continue;
             }
 
             // compare amino acids
-            if (!strncmp(
-                *(codon_names[get_codon_index(*(sample_segment + (codon * CODON_LENGTH)))]),
+            if (!strcmp(
+                codon_names[get_codon_index(*(sample_segment + (codon * CODON_LENGTH)))],
+                codon_names[get_codon_index(*(candidate_segment + (codon + iteration) * CODON_LENGTH))]
+                )) {
 
-                ))
+                temp_score += 5;
+                continue;
+            }
+
+
         }
     }
 
