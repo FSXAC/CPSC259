@@ -479,11 +479,12 @@ void analyze_segments( char * sample_segment, char ** candidate_segments, int nu
 
 	/* Hint: Otherwise we need to calculate and print all of the scores by invoking
 	   calculate_score for each candidate_segment and printing each result */
-    
+    scores = (int*)malloc(number_of_candidates*sizeof(int));
+
 	for (i = 0; i < number_of_candidates; ++i) {
 		// Insert your code here - maybe a call to calculate_score?
-        printf("Candidate number %d matches with a score of %d\n", i + 1,
-            calculate_score(sample_segment, *candidate_segments + i));
+        score = calculate_score(sample_segment, *(candidate_segments + i));
+        printf("Candidate number %d matches with a score of %d\n", i + 1, score);
 	}
 
 	/* End of function */
