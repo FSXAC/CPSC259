@@ -6,10 +6,10 @@ sequences of nucleotides best matches a
 specified sample.  The formatted DNA
 sequence file is a txt file (threes samples
 are provided in the Resource Files folder).
-Author:			Mansur (Muchen) He
-Student #s:		12345678 and 12345678
-CS Accounts:		a1a1 and b2b2
-Date:				Add the date here
+Author:			LuFei Liu, Muchen He
+Student #s:		14090154, 44638154
+CS Accounts:		d9l0b, p5h0b
+Date:				October 9, 2016
 */
 
 /******************************************************************
