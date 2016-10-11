@@ -464,7 +464,7 @@ void analyze_segments( char * sample_segment, char ** candidate_segments, int nu
     candidate_length = strlen(*(candidate_segments + i));
     if (sample_length == candidate_length && !strcmp(sample_segment, *candidate_segments)) {
       has_perfect_match = 1;
-      printf("Candidate number %d is a perfect match. GO CATCH HIM!!!!\n", i + 1);
+      printf("Candidate number %d is a perfect match.\n", i + 1);
     }
   } while (++i < number_of_candidates);
 
