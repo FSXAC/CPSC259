@@ -33,6 +33,20 @@ void addElement(node_t * head, int next_value, node_t * tail) {
   head->next_node->next_node = tail;
 }
 
+// a more intuitive way to add element to the end of the node
+void addElementAtEnd(node_t head, int next_value) {
+  // go to the end of the linked list
+  node_t * current = head;
+  while (current->next != NULL) {
+    current = current->next;
+  }
+
+  // now add one at the end
+  current->next_node = malloc(sizeof(node_t));
+  current->next_node->value = next_value;
+  current->next_node->next_node = NULL;
+}
+
 // add element in front of a node
 node_t addElementAsHead(node_t * head, int next_value) {
   node_t new_node = malloc(sizeof(node_t));
