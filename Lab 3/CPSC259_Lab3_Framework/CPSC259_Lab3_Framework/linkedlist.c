@@ -84,8 +84,8 @@ struct node * create_node(struct airplane plane)
  */
 struct node * prepend_node(struct node * list, struct node * new_node)
 {
-	// Insert your code here
-
+  new_node->next = list;
+  return new_node;
 }
 
 /*
@@ -115,8 +115,14 @@ struct node * delete_node(struct node * list)
  */
 int get_length(struct node * list)
 {
-	// Insert your code here
+  int length = 0;
+  struct node * current = list;
+  while (current != NULL) {
+    current = current->next;
+    length++;
+  }
 
+  return length;
 }
 
 /*
