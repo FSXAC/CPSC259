@@ -65,8 +65,10 @@ struct node * create_linked_list()
  */
 struct node * create_node(struct airplane plane)
 {
-	// Insert your code here
+  struct node * new_node = (node *)malloc(sizeof(node));
+  new_node->plane = plane;
 
+  return new_node;
 }
 
 /*
