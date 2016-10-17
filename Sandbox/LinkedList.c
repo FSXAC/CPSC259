@@ -47,14 +47,58 @@ void addElementAtEnd(node_t head, int next_value) {
   current->next_node->next_node = NULL;
 }
 
-// add element in front of a node
-node_t addElementAsHead(node_t * head, int next_value) {
+// // add element in front of a node
+// node_t addElementAsHead(node_t * head, int next_value) {
+//   node_t new_node = malloc(sizeof(node_t));
+//   new_node->value = next_value;
+//   new_node->next_node = head;
+//
+//   // this becomes the new head
+//   return new_node
+// }
+
+// add element in front of a node (no return)
+void addElementAsHead(node_t * head, int next_value) {
   node_t new_node = malloc(sizeof(node_t));
   new_node->value = next_value;
   new_node->next_node = head;
+  head = new_node;
+}
 
-  // this becomes the new head
-  return new_node
+// insert element at a specific location (after index)
+void insertElement(node_t * head, int next_value, int index) {
+  int i = 0;
+  node_t * current = head;
+  node_t new_node = malloc(sizeof(node_t));
+
+
+  // go to the the location
+  for (i = 0; i < index; i++) {
+    current = current->next_node;
+  }
+
+  // initalize new node
+  new_node->value = next_value;
+  new_node->next_node = current->next_node;
+  current->next_node = new_node;
+}
+
+// remove an element from a list
+void removeElement(node_t * head, int index) {
+  int i = 0;
+  node_t * current = head;
+  node_t * previous;
+
+  for (i = 0; i < index; i++) {
+    previous = current;
+    current = current->next_node;
+  }
+
+  // skip the one to delete (current)
+  previous->next_node = current->next_node;
+
+  // free up memory
+  free(current);
 }
 
 // display linked list
