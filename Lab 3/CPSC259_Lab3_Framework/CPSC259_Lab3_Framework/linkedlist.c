@@ -135,8 +135,18 @@ int get_length(struct node * list)
  */
 struct node * delete_list(struct node * list)
 {
-	// Insert your code here
+  struct node * current = list
+  struct node * previous;
 
+  while (current != NULL) {
+    previous = current;
+    current = current->next;
+    free(previous);
+  }
+
+  previous = NULL;
+
+  return list;
 }
 
 /*
@@ -153,8 +163,26 @@ struct node * delete_list(struct node * list)
  */
 void print_node(struct node * node_to_print)
 {
-	// Insert your code here
-
+  printf("FLT NUM:\t%d\
+          DEPART:\t%s\
+          DESTIN:\t%s\
+          PRIORITY:\t%d\
+          MAX SPD:\t%d\
+          CRUISE ALT:\t%d\
+          CAPACITY:\t%d\n",
+          node_to_print->plane.flight_num,
+          node_to_print->plane.city_origin,
+          node_to_print->plane.city_destination,
+          node_to_print->plane.priority,
+          node_to_print->plane.maximum_speed_kph,
+          node_to_print->plane.cruising_altitude,
+          node_to_print->plane.capacity
+        );
+  if (node_to_print != NULL) {
+    printf("LINK:\tNULL\n");
+  } else {
+    printf("LINL:\t%x\n", node_to_print->next);
+  }
 }
 
 /*
@@ -170,7 +198,6 @@ void print_node(struct node * node_to_print)
  */
 void print_list(struct node * list_to_print)
 {
-	// Insert your code here
 
 }
 
