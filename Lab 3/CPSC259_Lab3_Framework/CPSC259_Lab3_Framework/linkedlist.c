@@ -7,7 +7,7 @@
  CS Accounts:		a1a1 and b2b2
  Date:				Add the date here
  */
- 
+
 /* Preprocessor directives */
 #include <stdio.h>
 #include <stdlib.h>
@@ -49,7 +49,8 @@ int main ( void )
  */
 struct node * create_linked_list()
 {
-	// Insert your code here
+	struct node * head = NULL;
+  return head;
 }
 
 /*
@@ -98,8 +99,9 @@ struct node * prepend_node(struct node * list, struct node * new_node)
  */
 struct node * delete_node(struct node * list)
 {
-	// Insert your code here
-
+  free(list);
+  list = NULL;
+  return list;
 }
 
 /*
@@ -117,7 +119,7 @@ int get_length(struct node * list)
 
 /*
  Deletes an entire list.  This function iterates along a list and deallocates the
- memory containing each struct node.  
+ memory containing each struct node.
  PARAM:     list is a pointer to a (possibly empty) linked list of struct node
  PRE:       NULL (no pre-conditions)
  POST:      The memory containing all of the nodes in the list has been freed
@@ -165,7 +167,7 @@ void print_list(struct node * list_to_print)
 }
 
 /*
- Reverses a list. 
+ Reverses a list.
  PARAM:     list is a pointer to a (possibly empty) linked list of struct node
  PRE:       NULL (no pre-conditions)
  POST:      The order of the nodes in the list passed as a parameter has been
