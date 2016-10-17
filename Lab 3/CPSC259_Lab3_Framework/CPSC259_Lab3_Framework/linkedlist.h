@@ -18,12 +18,19 @@
 
 /* Insert your airplane structure here.  Use the correct types and names for the elements! */
 struct airplane {
-	// Add your member elements here
+	int flight_num;
+  char * city_origin;
+  char * city_destination;
+  int priority;
+  int maximum_speed_kph;
+  int cruising_altitude;
+  int capacity;
 };
 
 /* Insert your node structure here.  Use the correct types and names for the elements! */
 struct node {
-	// Add your member elements here
+  struct airplane plane;
+	struct node * next;
 };
 
 /* Prototypes for in-lab functions (do not add anything here) */
