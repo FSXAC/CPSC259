@@ -99,6 +99,9 @@ void removeElement(node_t * head, int index) {
 
   // free up memory
   free(current);
+
+  // no dangling pointers
+  current = NULL;
 }
 
 // display linked list
