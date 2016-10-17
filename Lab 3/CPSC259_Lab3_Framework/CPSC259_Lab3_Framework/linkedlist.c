@@ -65,7 +65,7 @@ struct node * create_linked_list()
  */
 struct node * create_node(struct airplane plane)
 {
-  struct node * new_node = (node *)malloc(sizeof(node));
+  struct node * new_node = (struct node *)malloc(sizeof(struct node));
   new_node->plane = plane;
 
   return new_node;
@@ -135,7 +135,7 @@ int get_length(struct node * list)
  */
 struct node * delete_list(struct node * list)
 {
-  struct node * current = list
+  struct node * current = list;
   struct node * previous;
 
   while (current != NULL) {
@@ -170,7 +170,7 @@ void print_node(struct node * node_to_print)
           MAX SPD:\t%d\
           CRUISE ALT:\t%d\
           CAPACITY:\t%d\n",
-          node_to_print->plane.flight_num,
+          node_to_print->plane.flight_number,
           node_to_print->plane.city_origin,
           node_to_print->plane.city_destination,
           node_to_print->plane.priority,
@@ -212,8 +212,33 @@ void print_list(struct node * list_to_print)
  */
 struct node * reverse(struct node * list)
 {
-	// Insert your code here
+  struct node * current = list;
+  struct node * previous;
+  struct node * new_list;
 
+  // // first one becomes the last one (which points to NULL)
+  // new_node = current;
+  // new_node->next = NULL;
+  //
+  // while (current != NULL) {
+  //   previous = new_node;
+  //   current = current->next;
+  //   new_node = current;
+  //   new_node->next = previous;
+  // }
+  //
+  // return new_node;
+
+  // create last element of new list
+  new_list = current;
+  new_list->next = NULL;
+
+  while (current != NULL) {
+    current = current->next;
+    new_list = prepend_node(new_list, current);
+  }
+
+  return new_list;
 }
 
 /*
@@ -230,8 +255,19 @@ struct node * reverse(struct node * list)
  */
 struct node * remove_from_list(struct node * list, char * destination_city)
 {
-	// Insert your code here
+	struct node * current = list;
+  struct node * previous;
 
+  while (current != NULL) {
+    previous = current;
+
+    if (!strcmp(list->plane.city_destination, destination_city)) {
+      previous->next = current->next;
+      free(current);
+    }
+
+    current = previous->next;
+  }
 }
 
 /*
@@ -247,8 +283,16 @@ struct node * remove_from_list(struct node * list, char * destination_city)
  */
 struct node * retrieve_nth(struct node * list, int ordinality)
 {
-	// Insert your code here
-
+	struct node * current = list;
+  int i = 0;
+  if (ordinality <= get_length(list)) {
+    for (; i < ordinality; i++) {
+      current = current->next;
+    }
+    return current;
+  } else {
+    return NULL;
+  }
 }
 
 /*
@@ -271,5 +315,18 @@ struct node * retrieve_nth(struct node * list, int ordinality)
  */
 struct node * insert_nth(struct node * list, struct node * node_to_insert, int ordinality)
 {
-	// Insert your code here
+	struct node * current;
+  struct node * new_node = node_to_insert;
+  int i = 0;
+
+  if (ordinality <= get_length(list) + 1) {
+    for (; i < ordinality; i++) {
+      current = current->next;
+    }
+
+    new_node->next = current->next;
+    current->next = new_node;
+  }
+
+  return list;
 }

@@ -18,7 +18,7 @@
 
 /* Insert your airplane structure here.  Use the correct types and names for the elements! */
 struct airplane {
-	int flight_num;
+  int flight_number;
   char * city_origin;
   char * city_destination;
   int priority;
