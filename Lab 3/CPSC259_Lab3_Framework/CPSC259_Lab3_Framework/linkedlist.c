@@ -34,10 +34,10 @@
  RETURN: IF the program exits correctly
 		 THEN 0 ELSE 1
  */
-int main ( void )
+int main (void)
 {
 	/* The system command forces the system to pause */
-	system(  "pause");
+	system("pause");
 	return 0;
 }
 
