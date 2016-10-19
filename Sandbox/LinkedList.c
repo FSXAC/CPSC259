@@ -3,8 +3,11 @@
 
 /*
 Abstraction of linked array
-[N|5| ]<->[ |4| ]<->[ |3|N]
+[5| ]-->[4| ]-->[3|N]
 N is for null, when the elements front / end of the list have nowhere to "link"
+
+Doubly linked array
+[N|5| ]<->[ |4| ]<->[ |3|N]
 */
 
 // declaring the struct for node
@@ -12,6 +15,13 @@ typedef struct node {
   int value;
   struct node * next_node;
 } node_t;
+
+// doubly linked list node
+typedef struct nodeD {
+  int value;
+  struct nodeD * prev_node;
+  struct nodeD * next_node;
+} node_d;
 
 int main(void) {
   // demonstration of linked
@@ -101,6 +111,21 @@ void removeElement(node_t * head, int index) {
   free(current);
 
   // no dangling pointers
+  current = NULL;
+}
+
+// remove an element from a doubly linked list
+void removeElementD(node_d * head, int index) {
+  int i = 0;
+  node_d * current = head;
+
+  for (i = 0; i < index; i++) {
+    current = current->next_node;
+  }
+
+  current->prev_node->next_node = current->next_node;
+  current->next_node->prev_node = current->prev_node;
+  free(current);
   current = NULL;
 }
 

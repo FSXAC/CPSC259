@@ -315,7 +315,7 @@ struct node * retrieve_nth(struct node * list, int ordinality)
  */
 struct node * insert_nth(struct node * list, struct node * node_to_insert, int ordinality)
 {
-	struct node * current;
+	struct node * current = list;
   struct node * new_node = node_to_insert;
   int i = 0;
 
