@@ -26,6 +26,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define TRUE 1
+#define FALSE 0
+
 // maximum number of items a stack can hold
 #define MAX_HOLD 10
 
@@ -41,7 +44,7 @@ typedef struct {
 } Stack;
 
 void initialize(Stack * stack) {
-  stack->top = 1;
+  stack->top = -1;
 
   // creating an array of 10 integers
   stack->list = (int *)malloc(sizeof(int) * 10);
@@ -58,9 +61,40 @@ int isFull(Stack * stack) {
 }
 
 // push / inserting operation
-void push(Stack * stack) {
+int push(Stack * stack, int value) {
   // must check if the stack is full or not
   if (!isFull(stack)) {
-    // add value to stack with index [top] and increment top
+    // increment top (-1 -> 0)
+    stack->top++;
+    // add value to stack with list index [top]
+    stack->list[stack->top] = value;
+    return TRUE;
+  } else {
+    // exception
+    return FALSE;
+  }
+}
+
+// return the top value, but do not remove
+int peek(Stack * stack) {
+  if (!isEmpty(stack)) {
+    return stack->list[stack->top];
+  } else {
+    return NULL;
+  }
+}
+
+int pop(Stack * stack) {
+  // create return val
+  int popval;
+
+  // must check if the stack is empty
+  if (!isEmpty(stack)) {
+    pop_val = peek(stack);
+
+    // move top to the previous down
+    stack->top--;
+  } else {
+    return NULL;
   }
 }

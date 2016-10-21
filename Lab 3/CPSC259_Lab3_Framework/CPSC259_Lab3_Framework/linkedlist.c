@@ -49,7 +49,7 @@ int main (void)
  */
 struct node * create_linked_list()
 {
-	struct node * head = NULL;
+	struct node * head = (struct node *)malloc(sizeof(struct node));
   return head;
 }
 
@@ -101,9 +101,9 @@ struct node * prepend_node(struct node * list, struct node * new_node)
  */
 struct node * delete_node(struct node * list)
 {
+  struct new_list = list->next;
   free(list);
-  list = NULL;
-  return list;
+  return new_list;
 }
 
 /*
@@ -213,7 +213,7 @@ void print_list(struct node * list_to_print)
 struct node * reverse(struct node * list)
 {
   struct node * current = list;
-  struct node * previous;
+  struct node * previous = NULL;
   struct node * new_list;
 
   // // first one becomes the last one (which points to NULL)
@@ -230,12 +230,23 @@ struct node * reverse(struct node * list)
   // return new_node;
 
   // create last element of new list
-  new_list = current;
-  new_list->next = NULL;
+  // new_list = current;
+  // new_list->next = NULL;
+  //
+  // while (current != NULL) {
+  //   current = current->next;
+  //   new_list = prepend_node(new_list, current);
+  // }
 
-  while (current != NULL) {
-    current = current->next;
-    new_list = prepend_node(new_list, current);
+  if (list == NULL) return list;
+  else if (get_length(list) == 1) return list;
+  else {
+    while (current != NULL) {
+      next = current->next;
+      current->next = previous;
+      previous = current;
+      current = next;
+    }
   }
 
   return new_list;
