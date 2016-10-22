@@ -145,14 +145,15 @@ struct node * delete_list(struct node * list)
   struct node * current = list;
   struct node * previous;
 
+  // free each of the node, current keeps one step ahead
   while (current != NULL) {
     previous = current;
     current = current->next;
     free(previous);
   }
 
+  // avoid dangling pointers
   previous = NULL;
-  current = NULL;
 
   return current;
 }
@@ -229,11 +230,8 @@ struct node * reverse(struct node * list)
     next = current->next;
 
     // change pointer "direction"
-    if (previous == NULL) {
-      current->next = NULL;
-    } else {
-      current->next = previous;
-    }
+    if (previous == NULL) current->next = NULL;
+    else current->next = previous;
 
     // move along
     previous = current;
@@ -258,22 +256,43 @@ struct node * reverse(struct node * list)
  */
 struct node * remove_from_list(struct node * list, char * destination_city)
 {
+  // create new list
+  struct node * new_list = create_linked_list();
+  struct node * new_current = new_list;
+
+  // to iterate through current list
   struct node * current = list;
-  struct node * previous;
 
   while (current != NULL) {
-    previous = current;
-
-    if (!strcmp(list->plane.city_destination, destination_city)) {
-      previous->next = current->next;
-      free(current);
+    // current is not destination city
+    if (!strcmp(destination_city, current->plane.city_destination)) {
+      new_current->next = create_node(current->plane);
+      new_current = new_current->next;
     }
 
-    current = previous->next;
+    // go through original list
+    current = current->next;
   }
 
-  return list;
+  // delete original list
+  delete_list(list);
+  return new_list;
 }
+// struct node * current = list;
+// struct node * previous = current;
+//
+// while (current != NULL) {
+//   // check if current node match destination city
+//   if (!strcmp(destination_city, current->plane.city_destination)) {
+//     previous->next = current->next;
+//     free(current);
+//   }
+//
+//   previous = current;
+//   current = current->next;
+// }
+//
+// return list;
 
 /*
  Returns a reference to the nth node (but does not remove it ) in the
