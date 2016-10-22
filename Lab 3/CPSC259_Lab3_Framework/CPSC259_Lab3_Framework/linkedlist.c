@@ -103,8 +103,12 @@ struct node * prepend_node(struct node * list, struct node * new_node)
  */
 struct node * delete_node(struct node * list)
 {
-  if (list == NULL) return NULL;
   struct node * new_list = list->next;
+
+  // check if there is anything to delete
+  if (list == NULL) return NULL;
+
+  // free the first element and get the pointer to the new "head"
   free(list);
   return new_list;
 }
@@ -217,45 +221,27 @@ void print_list(struct node * list_to_print)
 struct node * reverse(struct node * list)
 {
   struct node * current = list;
-  struct node * next;
   struct node * previous = NULL;
-  struct node * new_list = NULL;
+  struct node * next;
 
-  // // first one becomes the last one (which points to NULL)
-  // new_node = current;
-  // new_node->next = NULL;
-  //
-  // while (current != NULL) {
-  //   previous = new_node;
-  //   current = current->next;
-  //   new_node = current;
-  //   new_node->next = previous;
-  // }
-  //
-  // return new_node;
+  // iterate via loop
+  while (current != NULL) {
+    next = current->next;
 
-  // create last element of new list
-  // new_list = current;
-  // new_list->next = NULL;
-  //
-  // while (current != NULL) {
-  //   current = current->next;
-  //   new_list = prepend_node(new_list, current);
-  // }
-
-  if (list == NULL) return list;
-  else if (get_length(list) == 1) return list;
-  else {
-    // TODO: This is still not working because new_list is not assigned anything
-    while (current != NULL) {
-      next = current->next;
+    // change pointer "direction"
+    if (previous == NULL) {
+      current->next = NULL;
+    } else {
       current->next = previous;
-      previous = current;
-      current = next;
     }
+
+    // move along
+    previous = current;
+    current = next;
   }
 
-  return new_list;
+  // return the pointer to the tail, which is now the head
+  return previous;
 }
 
 /*
@@ -282,7 +268,7 @@ struct node * remove_from_list(struct node * list, char * destination_city)
       previous->next = current->next;
       free(current);
     }
-    
+
     current = previous->next;
   }
 
