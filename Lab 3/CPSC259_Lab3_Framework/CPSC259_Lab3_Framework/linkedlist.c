@@ -49,7 +49,8 @@ int main (void)
  */
 struct node * create_linked_list()
 {
-	struct node * head = (struct node *)malloc(sizeof(struct node));
+	//struct node * head = (struct node *)malloc(sizeof(struct node));
+  struct node * head = NULL;
   return head;
 }
 
@@ -67,6 +68,7 @@ struct node * create_node(struct airplane plane)
 {
   struct node * new_node = (struct node *)malloc(sizeof(struct node));
   new_node->plane = plane;
+  new_node->next = NULL;
 
   return new_node;
 }
@@ -101,6 +103,7 @@ struct node * prepend_node(struct node * list, struct node * new_node)
  */
 struct node * delete_node(struct node * list)
 {
+  if (list == NULL) return NULL;
   struct node * new_list = list->next;
   free(list);
   return new_list;
@@ -145,8 +148,9 @@ struct node * delete_list(struct node * list)
   }
 
   previous = NULL;
+  current = NULL;
 
-  return list;
+  return current;
 }
 
 /*
