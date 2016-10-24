@@ -37,7 +37,7 @@ int main(void) {
 }
 
 // Array representation of stack
-typedef struct {
+typedef struct stack{
   // top is the index of the top most element
   int top;
   int * list;
@@ -90,10 +90,11 @@ int pop(Stack * stack) {
 
   // must check if the stack is empty
   if (!isEmpty(stack)) {
-    pop_val = peek(stack);
+    popval = peek(stack);
 
     // move top to the previous down
     stack->top--;
+    return popval;
   } else {
     return NULL;
   }
