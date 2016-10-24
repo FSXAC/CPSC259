@@ -49,6 +49,7 @@ int main (void)
  */
 struct node * create_linked_list()
 {
+	//struct node * head = (struct node *)malloc(sizeof(struct node));
   struct node * head = NULL;
   return head;
 }
@@ -102,11 +103,10 @@ struct node * prepend_node(struct node * list, struct node * new_node)
  */
 struct node * delete_node(struct node * list)
 {
-  struct node * new_list;
+  struct node * new_list = list->next;
 
   // check if there is anything to delete
   if (list == NULL) return NULL;
-  else new_list = list->next;
 
   // free the first element and get the pointer to the new "head"
   free(list);
@@ -253,21 +253,18 @@ struct node * reverse(struct node * list)
             the memory deallocated
  RETURN:    a list of struct node that does not contain any struct node that
             has an airplane destined for the destination_city
-            */
+ */
 struct node * remove_from_list(struct node * list, char * destination_city)
 {
   // iterate through current list while keep track of previous
   struct node * current = list;
   struct node * previous = current;
-  struct node * next;
 
-  struct node * new_list = list;
-  
   while (current != NULL) {
     next = current->next;
 
     // see if the destination city is the one we're looking for
-    if (strcmp(current->plane.city_destination, destination_city) == 0) {
+    if (strcmp(current->plane.city_destination, destination) == 0) {
       // remove from list
       previous->next = next;
       free(current);
@@ -277,8 +274,8 @@ struct node * remove_from_list(struct node * list, char * destination_city)
     previous = current;
     current = next;
   }
-  
-  return list;
+
+  return list
 }
 
 /*
@@ -297,7 +294,7 @@ struct node * retrieve_nth(struct node * list, int ordinality)
 	struct node * current = list;
   int i = 0;
   if (ordinality <= get_length(list)) {
-    for (; i < ordinality - 1; i++) {
+    for (; i < ordinality; i++) {
       current = current->next;
     }
     return current;
@@ -329,44 +326,16 @@ struct node * insert_nth(struct node * list, struct node * node_to_insert, int o
   struct node * new_node = node_to_insert;
   struct node * temp = list;
   struct node * current = temp;
-  struct node * previous;
   int i = 0;
 
-  //if (ordinality <= get_length(list) + 1) {
-  //  for (; i < ordinality-2; i++) {
-  //    current = current->next;
-  //  }
-
-  //  if (ordinality == 1) {
-  //    new_node->next = current;
-  //  }
-  //  else {
-  //    new_node->next = current->next;
-  //    current->next = new_node;
-  //  }
-  //}
-
-  if (ordinality > get_length(list) + 1) {
-    return temp;
-  }
-  else if (ordinality == 1) {
-    // prepend at the head
-    return prepend_node(list, node_to_insert);
-  }
-  else if (ordinality == get_length(list) + 1) {
-    // go to the end
-    while (current->next != NULL) {
-      previous = current;
+  if (ordinality <= get_length(list) + 1) {
+    for (; i < ordinality-2; i++) {
       current = current->next;
     }
 
-    current->next = new_node;
-  }
-  else {
-    for (i = 0; i < ordinality - 2; i++) {
-      current = current->next;
-    }
     new_node->next = current->next;
     current->next = new_node;
   }
+
+  return temp;
 }
