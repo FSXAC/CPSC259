@@ -49,7 +49,6 @@ int main (void)
  */
 struct node * create_linked_list()
 {
-	//struct node * head = (struct node *)malloc(sizeof(struct node));
   struct node * head = NULL;
   return head;
 }
@@ -103,10 +102,11 @@ struct node * prepend_node(struct node * list, struct node * new_node)
  */
 struct node * delete_node(struct node * list)
 {
-  struct node * new_list = list->next;
+  struct node * new_list;
 
   // check if there is anything to delete
   if (list == NULL) return NULL;
+  else new_list = list->next;
 
   // free the first element and get the pointer to the new "head"
   free(list);
@@ -253,46 +253,33 @@ struct node * reverse(struct node * list)
             the memory deallocated
  RETURN:    a list of struct node that does not contain any struct node that
             has an airplane destined for the destination_city
- */
+            */
 struct node * remove_from_list(struct node * list, char * destination_city)
 {
-  // create new list
-  struct node * new_list = create_linked_list();
-  struct node * new_current = new_list;
-
-  // to iterate through current list
+  // iterate through current list while keep track of previous
   struct node * current = list;
+  struct node * previous = current;
+  struct node * next;
 
+  struct node * new_list = list;
+  
   while (current != NULL) {
-    // current is not destination city
-    if (!strcmp(destination_city, current->plane.city_destination)) {
-      new_current->next = create_node(current->plane);
-      new_current = new_current->next;
+    next = current->next;
+
+    // see if the destination city is the one we're looking for
+    if (strcmp(current->plane.city_destination, destination_city) == 0) {
+      // remove from list
+      previous->next = next;
+      free(current);
     }
 
-    // go through original list
-    current = current->next;
+    // move on
+    previous = current;
+    current = next;
   }
-
-  // delete original list
-  delete_list(list);
-  return new_list;
+  
+  return list;
 }
-// struct node * current = list;
-// struct node * previous = current;
-//
-// while (current != NULL) {
-//   // check if current node match destination city
-//   if (!strcmp(destination_city, current->plane.city_destination)) {
-//     previous->next = current->next;
-//     free(current);
-//   }
-//
-//   previous = current;
-//   current = current->next;
-// }
-//
-// return list;
 
 /*
  Returns a reference to the nth node (but does not remove it ) in the
@@ -310,7 +297,7 @@ struct node * retrieve_nth(struct node * list, int ordinality)
 	struct node * current = list;
   int i = 0;
   if (ordinality <= get_length(list)) {
-    for (; i < ordinality; i++) {
+    for (; i < ordinality - 1; i++) {
       current = current->next;
     }
     return current;
@@ -342,18 +329,44 @@ struct node * insert_nth(struct node * list, struct node * node_to_insert, int o
   struct node * new_node = node_to_insert;
   struct node * temp = list;
   struct node * current = temp;
+  struct node * previous;
   int i = 0;
 
-  if (ordinality <= get_length(list) + 1) {
-    for (; i < ordinality-2; i++) {
+  //if (ordinality <= get_length(list) + 1) {
+  //  for (; i < ordinality-2; i++) {
+  //    current = current->next;
+  //  }
+
+  //  if (ordinality == 1) {
+  //    new_node->next = current;
+  //  }
+  //  else {
+  //    new_node->next = current->next;
+  //    current->next = new_node;
+  //  }
+  //}
+
+  if (ordinality > get_length(list) + 1) {
+    return temp;
+  }
+  else if (ordinality == 1) {
+    // prepend at the head
+    return prepend_node(list, node_to_insert);
+  }
+  else if (ordinality == get_length(list) + 1) {
+    // go to the end
+    while (current->next != NULL) {
+      previous = current;
       current = current->next;
     }
 
+    current->next = new_node;
+  }
+  else {
+    for (i = 0; i < ordinality - 2; i++) {
+      current = current->next;
+    }
     new_node->next = current->next;
     current->next = new_node;
   }
-
-  return temp;
 }
-
-// randomlines
