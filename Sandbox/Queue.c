@@ -8,6 +8,8 @@
 
 #define MAX_HOLD 10
 
+// TODO: add implementation of CIRCULAR ARRAYS
+
 // queue
 typedef struct {
   int front;

@@ -339,12 +339,13 @@ struct node * retrieve_nth(struct node * list, int ordinality)
  */
 struct node * insert_nth(struct node * list, struct node * node_to_insert, int ordinality)
 {
-	struct node * current = list;
   struct node * new_node = node_to_insert;
+  struct node * temp = list;
+  struct node * current = temp;
   int i = 0;
 
   if (ordinality <= get_length(list) + 1) {
-    for (; i < ordinality; i++) {
+    for (; i < ordinality-2; i++) {
       current = current->next;
     }
 
@@ -352,5 +353,5 @@ struct node * insert_nth(struct node * list, struct node * node_to_insert, int o
     current->next = new_node;
   }
 
-  return list;
+  return temp;
 }
