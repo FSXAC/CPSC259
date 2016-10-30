@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Linked List", "CPSC259_Lab3_Framework\CPSC259_Lab3_Framework.vcxproj", "{4120CED3-49E1-40D3-BB8C-AA3EF9AA63C1}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Unit Tests", "Lab3_Unit_Tests\Lab3_Unit_Tests.vcxproj", "{884AE704-C2F7-4496-9EF6-AC258528EF66}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -15,6 +17,10 @@ Global
 		{4120CED3-49E1-40D3-BB8C-AA3EF9AA63C1}.Debug|Win32.Build.0 = Debug|Win32
 		{4120CED3-49E1-40D3-BB8C-AA3EF9AA63C1}.Release|Win32.ActiveCfg = Release|Win32
 		{4120CED3-49E1-40D3-BB8C-AA3EF9AA63C1}.Release|Win32.Build.0 = Release|Win32
+		{884AE704-C2F7-4496-9EF6-AC258528EF66}.Debug|Win32.ActiveCfg = Debug|Win32
+		{884AE704-C2F7-4496-9EF6-AC258528EF66}.Debug|Win32.Build.0 = Debug|Win32
+		{884AE704-C2F7-4496-9EF6-AC258528EF66}.Release|Win32.ActiveCfg = Release|Win32
+		{884AE704-C2F7-4496-9EF6-AC258528EF66}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

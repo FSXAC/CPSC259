@@ -259,12 +259,13 @@ struct node * remove_from_list(struct node * list, char * destination_city)
   // iterate through current list while keep track of previous
   struct node * current = list;
   struct node * previous = current;
+  struct node * next;
 
   while (current != NULL) {
     next = current->next;
 
     // see if the destination city is the one we're looking for
-    if (strcmp(current->plane.city_destination, destination) == 0) {
+    if (strcmp(current->plane.city_destination, destination_city) == 0) {
       // remove from list
       previous->next = next;
       free(current);
@@ -275,7 +276,7 @@ struct node * remove_from_list(struct node * list, char * destination_city)
     current = next;
   }
 
-  return list
+  return list;
 }
 
 /*
@@ -294,7 +295,7 @@ struct node * retrieve_nth(struct node * list, int ordinality)
 	struct node * current = list;
   int i = 0;
   if (ordinality <= get_length(list)) {
-    for (; i < ordinality; i++) {
+    for (; i < ordinality - 1; i++) {
       current = current->next;
     }
     return current;
