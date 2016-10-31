@@ -15,7 +15,7 @@
  ******************************************************************/
 
 
-/* Preprocessor directives */	
+/* Preprocessor directives */
 #include <stdio.h>
 #include <stdlib.h>
 #include "recursion.h"
@@ -54,8 +54,15 @@ int main (void)
  */
 int calculate_power(int base, int power)
 {
-	// Replace this return statement with your own code
-	return -1;
+  // start with product being 1
+  int product = 1;
+
+
+  if (power > 0 && base != 0) {
+    product = base * calculate_power(base, power - 1);
+  }
+
+  return product;
 }
 
 /*
@@ -66,25 +73,31 @@ int calculate_power(int base, int power)
  */
 int count_digits(int number)
 {
-	// Replace this return statement with your own code
-	return -1;
+  int digit = 1;
+	if (number / 10 > 0){
+    digit += count_digits(number / 10);
+  }
+  return digit;
 }
 
 /*
  Returns the length of the specified string.
  PARAM:  string, a pointer to an array of char
  PRE:    the string pointer is not a dangling pointer
- RETURN: the length of the string passed as a parameter  
+ RETURN: the length of the string passed as a parameter
  */
 int string_length( char * string )
 {
-	// Replace this return statement with your own code
-	return -1;
+  int i = 0;
+  if (*string != '\0') {
+    i += 1 + string_length(string+1);
+  }
+  return i;
 }
 
 /*
  Determines if a string is a palindrome.  DOES NOT skip spaces!
- For example, 
+ For example,
  ""     -> returns 1 (an empty string is a palindrome)
  "the"  -> returns 0
  "abba" -> returns 1
@@ -100,8 +113,22 @@ int string_length( char * string )
  */
 int is_palindrome(char * string, int string_length)
 {
-	// Replace this return statement with your own code
-	return -1;
+	// int i = 1;
+  // if (string_length == 0)
+  //   return 1;
+  // else if (*string == *(string + string_length - 1) && string_length!=0)
+  //   i = is_palindrome(string + 1, string_length - 2);
+  // else {
+  //   return 0;
+  // }
+  // return i;
+
+  int isPalindrome = 1;
+  if (string_length <= 1) return 1;
+  else if (*string == string[string_length - 1])
+    isPalindrome *= is_palindrome(string + 1, string_length - 2);
+  else return 0;
+  return isPalindrome;
 }
 
 /*
@@ -110,9 +137,11 @@ int is_palindrome(char * string, int string_length)
  PRE:       number >= 1
  POST:      draws a ramp whose height is the specified number
  */
-void draw_ramp( int number ) 
+void draw_ramp( int number )
 {
-
+  draw_row(number);
+  if (number > 1) draw_ramp(number - 1);
+  draw_row(number);
 }
 
 /*
@@ -123,5 +152,7 @@ void draw_ramp( int number )
  */
 void draw_row( int size )
 {
-
+  printf("%c", '*');
+  if (size > 1) draw_row(size - 1);
+  else printf("\n");
 }
