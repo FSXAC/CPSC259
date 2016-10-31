@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Unit Tests", "Unit Tests\Unit Tests.vcxproj", "{CCC2C920-E3A8-487A-AC80-BF205F4A4A0F}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Recursion", "CPSC259_Lab4_InLabFramework\CPSC259_Lab4_InLabFramework.vcxproj", "{C0548804-279B-44E2-B32B-8FBBB43CC935}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CCC2C920-E3A8-487A-AC80-BF205F4A4A0F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{CCC2C920-E3A8-487A-AC80-BF205F4A4A0F}.Debug|Win32.Build.0 = Debug|Win32
+		{CCC2C920-E3A8-487A-AC80-BF205F4A4A0F}.Release|Win32.ActiveCfg = Release|Win32
+		{CCC2C920-E3A8-487A-AC80-BF205F4A4A0F}.Release|Win32.Build.0 = Release|Win32
+		{C0548804-279B-44E2-B32B-8FBBB43CC935}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C0548804-279B-44E2-B32B-8FBBB43CC935}.Debug|Win32.Build.0 = Debug|Win32
+		{C0548804-279B-44E2-B32B-8FBBB43CC935}.Release|Win32.ActiveCfg = Release|Win32
+		{C0548804-279B-44E2-B32B-8FBBB43CC935}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

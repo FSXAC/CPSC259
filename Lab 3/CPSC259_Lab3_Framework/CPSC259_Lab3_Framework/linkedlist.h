@@ -31,7 +31,6 @@ struct airplane {
 struct node {
 	struct airplane plane;
 	struct node* next;
-
 };
 
 /* Prototypes for in-lab functions (do not add anything here) */
