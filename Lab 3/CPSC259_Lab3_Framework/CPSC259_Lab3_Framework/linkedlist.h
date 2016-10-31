@@ -1,10 +1,10 @@
 /*
  File:              linkedlist.c
  Purpose:           Prototypes for a linked list implementation
- Author:			Your names
- Student #s:		12345678 and 12345678
- CS Accounts:		a1a1 and b2b2
- Date:				Add the date here
+ Author:			Geoff Goodwin-Wilson, Mansur He
+ Student #s:		30215164, 44638154
+ CS Accounts:		s2v0b, p5h0b
+ Date:				October 30th, 2016
  */
 
 #pragma once
@@ -18,19 +18,20 @@
 
 /* Insert your airplane structure here.  Use the correct types and names for the elements! */
 struct airplane {
-  int flight_number;
-  char * city_origin;
-  char * city_destination;
-  int priority;
-  int maximum_speed_kph;
-  int cruising_altitude;
-  int capacity;
+	int flight_number;
+	char* city_origin;
+	char* city_destination;
+	int priority;
+	int maximum_speed_kph;
+	int cruising_altitude;
+	int capacity;
 };
 
 /* Insert your node structure here.  Use the correct types and names for the elements! */
 struct node {
-  struct airplane plane;
-	struct node * next;
+	struct airplane plane;
+	struct node* next;
+
 };
 
 /* Prototypes for in-lab functions (do not add anything here) */
