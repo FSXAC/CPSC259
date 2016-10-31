@@ -1,5 +1,5 @@
 /*
- File:              linkedlist.c
+ File:              linkedlist.h
  Purpose:           Prototypes for a linked list implementation
  Author:			Geoff Goodwin-Wilson, Mansur He
  Student #s:		30215164, 44638154
