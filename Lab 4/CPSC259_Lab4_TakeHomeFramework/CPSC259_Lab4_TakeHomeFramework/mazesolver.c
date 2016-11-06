@@ -56,8 +56,7 @@ int main ( void )
 	/* Calls the functions that:
 	   a) get the size of the maze and stores it in the dimension variable
 	   b) copies the maze into memory */
-	// INSERT YOUR CODE HERE (2 lines)
-	// dimension = ...
+	dimension = get_maze_dimension(maze_file);
   // maze = parse_maze( ...
 
   } else {
@@ -102,11 +101,9 @@ int get_maze_dimension( FILE* maze_file )  {
    IF TRUE reduce strlen by 2 in order to omit '\r' and '\n' from each line
    ELSE    reduce strlen by 1 in order to omit '\n' from each line */
   if ( strchr( line_buffer, '\r' ) != NULL ) {
-    // INSERT CODE HERE (1 line)
-    // return ...
+    return dimension - 2;
   } else {
-    // INSERT CODE HERE (1 line)
-    // return ...
+    return dimension - 1;
   }
 }
 
