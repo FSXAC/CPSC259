@@ -57,7 +57,7 @@ int main ( void )
 	   a) get the size of the maze and stores it in the dimension variable
 	   b) copies the maze into memory */
 	dimension = get_maze_dimension(maze_file);
-  // maze = parse_maze( ...
+  maze = parse_maze(maze_file, dimension);
 
   } else {
 	fprintf( stderr, "Unable to parse maze file: %s\n", MAZE1 );
@@ -137,22 +137,19 @@ maze_cell** parse_maze( FILE * maze_file, int dimension )
 	maze_cell ** maze = NULL;
 
   /* Allocates memory for correctly-sized maze */
-  // INSERT CODE HERE (1 line)
-  // maze = ( maze_cell ** ) calloc ... (1 line)
+  maze = (maze_cell **) calloc(dimension * dimension * sizeof(maze_cell));
 
   for ( row = 0; row < dimension; ++row ) {
-      // INSERT CODE HERE (1 line)
-      // maze[row] = ( maze_cell* ) calloc ... (1 line)
+    maze[row] = (maze_cell *) calloc(dimension * sizeof(maze_cell));
   }
 
   /* Copies maze file to memory */
 	row = 0;
     while ( fgets ( line_buffer, BUFFER, maze_file ) ) {
       for ( column = 0; column < dimension; ++column ) {
-        // INSERT CODE HERE (2 lines)
-        // maze[row][column].character = ...
-        // maze[row][column].visited = ...
-		}
+        maze[row][column].character = line_buffer[column];
+        maze[row][column].visited = 'n';
+  		}
       row++;
     }
 	return maze;
