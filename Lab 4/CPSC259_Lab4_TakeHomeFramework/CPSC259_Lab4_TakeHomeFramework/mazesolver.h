@@ -1,10 +1,10 @@
 /*
  File:              mazesolver.h
  Purpose:           Contains constants, prototypes, globals
- Author:			Your names
- Student #s:		12345678 and 12345678
- CS Accounts:		a1a1 and b2b2
- Date:				Add the date here
+ Author:			Muchen He, Henry Mao
+ Student #s:		44638154 and xxxxxxxx
+ CS Accounts:		p5h0b and xxxxx
+ Date:				2016-11-06
  */
 
 /******************************************************************
@@ -42,7 +42,7 @@ typedef struct maze_cell {
 } maze_cell; /* We're using a little trick here.  Instead of writing struct maze_cell everywhere
                 in our code, we're writing maze_cell.  We can do this because at the end of our
                 struct maze_cell definition, we've tacked on the short form of the struct name.
-				When we do this, the C standard lets us use maze_cell instead of struct maze_cell.  */
+				        When we do this, the C standard lets us use maze_cell instead of struct maze_cell.  */
 
 /* Function prototypes */
 void         print_generated_paths ( );
