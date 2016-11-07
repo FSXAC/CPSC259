@@ -66,11 +66,10 @@ int main ( void )
   }
 
   /* Traverses maze and generates all solutions */
-	// generate_all_paths(maze, dimension, 0, 0, paths);
+	generate_all_paths(maze, dimension, 0, 0, paths);
 
 	/* Calculates and displays required data */
-	// INSERT YOUR CODE HERE
-  printf("%d", path_cost("123"));
+  printf("%d\n", path_cost("123"));
 
   /* Ends main function */
 	system( "pause" );
@@ -212,6 +211,7 @@ void generate_all_paths( maze_cell ** maze, int dimension, int row, int column, 
 
     new_path = strcat( new_path, new_point );
 
+    // if it's at the right location
     if ( column == ( dimension - 1 ) ) {
   		/* 1. Reallocate memory in global paths array to make room
   		      for a new solution string
@@ -271,7 +271,7 @@ int path_cost ( char * path_string )
  */
 void display_shortest_path ( )
 {
-	// INSERT CODE HERE
+
 }
 
 /*
