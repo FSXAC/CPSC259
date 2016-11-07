@@ -182,7 +182,9 @@ void generate_all_paths( maze_cell ** maze, int dimension, int row, int column, 
 
   /* Checks for base cases */
   // if the point we're looking at is either a wall or a point already visited
-  if (maze[row][column].character == '*' || maze[row][column].visited == 'y' ) {
+  // if the point is outside the maze
+  if (maze[row][column].character == '*' || maze[row][column].visited == 'y' ||
+      row > dimension - 1 || row < 0 || column > dimension - 1 || column < 0) {
     return;
   }
 
@@ -200,7 +202,7 @@ void generate_all_paths( maze_cell ** maze, int dimension, int row, int column, 
 		6. concatenate new point to new path */
   else {
   	path_length = strlen( path );
-  	new_path = ( char * ) calloc( path_length + 2, sizeof( char ) );
+    new_path =  ( char * ) calloc( path_length + 2, sizeof( char ) );
   	new_point = ( char * ) calloc( 2, sizeof( char ) );
   	new_point[0] = maze[row][column].character;
 
@@ -271,7 +273,24 @@ int path_cost ( char * path_string )
  */
 void display_shortest_path ( )
 {
+  int i, j;
+  int shortest = NULL;
 
+  for (i = 0; i < paths_found; i++) {
+    j = 0;
+
+    // count the length of path
+    while (paths[i][j] != '\0') j++;
+
+    // find min
+    shortest = (shortest == NULL) ? i : (shortest > i) ? i : shortest;
+  }
+
+  // print out the path
+  i = 0;
+  printf("Shortest path: ")
+  while (paths[shortest][i] != '\0') printf("%c", paths[shortest][i]);
+  printf("\n");
 }
 
 /*
