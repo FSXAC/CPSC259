@@ -280,16 +280,16 @@ void display_shortest_path ( )
     j = 0;
 
     // count the length of path
-    while (paths[i][j] != '\0') j++;
+    while (paths[i][j++] != '\0');
 
     // find min
-    shortest = (shortest == NULL) ? i : (shortest > i) ? i : shortest;
+    shortest = (shortest == NULL) ? j : (shortest > j) ? i : shortest;
   }
 
   // print out the path
   i = 0;
-  printf("Shortest path: ")
-  while (paths[shortest][i] != '\0') printf("%c", paths[shortest][i]);
+  printf("Shortest path: ");
+  while (paths[shortest][i] != '\0') printf("%c", paths[shortest][i++]);
   printf("\n");
 }
 
@@ -304,7 +304,29 @@ void display_shortest_path ( )
  */
 void display_cheapest_path()
 {
-	// INSERT CODE HERE
+	int i, j, cost;
+  int cheapest = NULL;
+
+  for (i = 0; i < path_found; i++) {
+    j = 0;
+    cost = 0;
+
+    // count the cost
+    while (path[i][j] != '\0') cost += (path[i][j++] - '0');
+
+    // find min
+    cheapest = (cheapest == NULL) ? cost : (cheapest > cost) : cheapest;
+  }
+
+  // printout path
+  i = 0;
+  cost = 0;
+  printf("Cheapest path: ");
+  while (paths[cheapest][i] != '\0')  {
+    printf("%c", paths[cheapest][i]);
+    cost += (paths[cheapest][i++] - '0');
+  }
+  printf("\nCheapest path costs: %d\n", cost);
 }
 
 /* End of file */
