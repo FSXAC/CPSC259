@@ -66,11 +66,11 @@ int main ( void )
   }
 
   /* Traverses maze and generates all solutions */
-	// INSERT YOUR CODE HERE (1 line)
-	// generate_all_paths(...
+	// generate_all_paths(maze, dimension, 0, 0, paths);
 
 	/* Calculates and displays required data */
 	// INSERT YOUR CODE HERE
+  printf("%d", path_cost("123"));
 
   /* Ends main function */
 	system( "pause" );
@@ -250,7 +250,16 @@ void generate_all_paths( maze_cell ** maze, int dimension, int row, int column, 
  */
 int path_cost ( char * path_string )
 {
-	// INSERT CODE HERE
+	int i = 0;
+  int strlength = strlen(path_string);
+  int cost = 0;
+
+  // add str -> int value to cost sum;
+  while (i < strlength) {
+    cost += path_string[i++] - '0';
+  }
+
+  return cost;
 }
 
 /*
