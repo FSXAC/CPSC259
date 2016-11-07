@@ -183,7 +183,7 @@ void generate_all_paths( maze_cell ** maze, int dimension, int row, int column, 
   /* Checks for base cases */
   // if the point we're looking at is either a wall or a point already visited
   // if the point is outside the maze
-  if (maze[row][column].character == '*' || maze[row][column].visited == 'y' ||
+  if (maze[row][column].character == MAZE_WALL || maze[row][column].visited == VISITED ||
       row > dimension - 1 || row < 0 || column > dimension - 1 || column < 0) {
     return;
   }
@@ -229,12 +229,12 @@ void generate_all_paths( maze_cell ** maze, int dimension, int row, int column, 
   		/* 1. Mark point as visited
   		   2. Recursively search in each direction using the new path
   		   3. Mark point as unvisited */
-      maze[row][column].visited = 'y';
+      maze[row][column].visited = VISITED;
       generate_all_paths(maze, dimension, row, column + 1, new_path); // RIGHT
       generate_all_paths(maze, dimension, row, column - 1, new_path); // LEFT
       generate_all_paths(maze, dimension, row + 1, column, new_path); // DOWN
       generate_all_paths(maze, dimension, row - 1, column, new_path); // UP
-      maze[row][column].visited = 'n';
+      maze[row][column].visited = UNVISITED;
 		  return;
     }
   }
