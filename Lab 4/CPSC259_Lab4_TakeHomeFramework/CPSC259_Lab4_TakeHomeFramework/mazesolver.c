@@ -1,10 +1,10 @@
 /*
  File:              mazesolver.c
  Purpose:           Add a brief description
- Author:			Your names
- Student #s:		12345678 and 12345678
- CS Accounts:		a1a1 and b2b2
- Date:				Add the date here
+ Author:			Muchen He, Henry Mao
+ Student #s:		44638154 and XXXXXXXX
+ CS Accounts:		p5h0b and XXXXX
+ Date:				2016-11-06
  */
 
 
@@ -137,10 +137,10 @@ maze_cell** parse_maze( FILE * maze_file, int dimension )
 	maze_cell ** maze = NULL;
 
   /* Allocates memory for correctly-sized maze */
-  maze = (maze_cell **) calloc(dimension * dimension * sizeof(maze_cell));
+  maze = (maze_cell **) calloc(dimension * dimension, sizeof(maze_cell));
 
   for ( row = 0; row < dimension; ++row ) {
-    maze[row] = (maze_cell *) calloc(dimension * sizeof(maze_cell));
+    maze[row] = (maze_cell *) calloc(dimension, sizeof(maze_cell));
   }
 
   /* Copies maze file to memory */
@@ -181,12 +181,11 @@ void generate_all_paths( maze_cell ** maze, int dimension, int row, int column, 
 	char * new_point  = NULL;
 	char * new_path   = NULL;
 
-    /* Checks for base cases */
-    if ( // INSERT CODE HERE: Simply return if we hit one of the base cases (there are more than 1)
-         // (remember to delete 1 on the next line, which is here so the incomplete program compiles)
-         1 ) {
+  /* Checks for base cases */
+  // if the point we're looking at is either a wall or a point already visited
+  if (maze[row][column].character == '*' || maze[row][column].visited == 'y' ) {
     return;
-	}
+  }
 
   /* Otherwise deals with the recursive case.  Pushes the current coordinate onto the path
    and checks to see if the right boundary of the maze has been reached
@@ -201,38 +200,41 @@ void generate_all_paths( maze_cell ** maze, int dimension, int row, int column, 
 		5. concatenate old path to new path
 		6. concatenate new point to new path */
   else {
-	path_length = strlen( path );
-	new_path = ( char * ) calloc( path_length + 2, sizeof( char ) );
-	new_point = ( char * ) calloc( 2, sizeof( char ) );
-	new_point[0] = maze[row][column].character;
-	if ( path_length ) {
-		new_path = strcat( new_path, path );
-	}
-	new_path = strcat( new_path, new_point );
+  	path_length = strlen( path );
+  	new_path = ( char * ) calloc( path_length + 2, sizeof( char ) );
+  	new_point = ( char * ) calloc( 2, sizeof( char ) );
+  	new_point[0] = maze[row][column].character;
 
-      if ( column == ( dimension - 1 ) ) {
-		/* 1. Reallocate memory in global paths array to make room
-		      for a new solution string
-		   2. Copy the solution path to the location of new string
-		   3. Increment paths counter */
-		paths = ( char ** ) realloc ( paths, ( paths_found + 1 ) * sizeof( char* ) );
-          paths[paths_found] = ( char* ) calloc( strlen( new_path ) + 1, sizeof( char ));
-		strcpy( paths[paths_found], new_path );
-		paths_found++;
-          return;
-      } else {
-		/* 1. Mark point as visited
-		   2. Recursively search in each direction using the new path
-		   3. Mark point as unvisited */
-          // INSERT CODE HERE (6 lines)
-          // maze.[row][column].visited = ...
-          // generate_all_paths...
-          // generate_all_paths...
-          // generate_all_paths...
-          // generate_all_paths...
-          // maze.[row][column].visited = ...
-		return;
-      }
+    // if path length is not 0
+    if ( path_length ) {
+    	new_path = strcat( new_path, path );
+    }
+
+    new_path = strcat( new_path, new_point );
+
+    if ( column == ( dimension - 1 ) ) {
+  		/* 1. Reallocate memory in global paths array to make room
+  		      for a new solution string
+  		   2. Copy the solution path to the location of new string
+  		   3. Increment paths counter */
+  		paths = ( char ** ) realloc ( paths, ( paths_found + 1 ) * sizeof( char* ) );
+      paths[paths_found] = ( char* ) calloc( strlen( new_path ) + 1, sizeof( char ));
+
+      strcpy( paths[paths_found], new_path );
+  		paths_found++;
+      return;
+    } else {
+  		/* 1. Mark point as visited
+  		   2. Recursively search in each direction using the new path
+  		   3. Mark point as unvisited */
+      maze[row][column].visited = 'y';
+      generate_all_paths(maze, dimension, row, column + 1, new_path); // RIGHT
+      generate_all_paths(maze, dimension, row, column - 1, new_path); // LEFT
+      generate_all_paths(maze, dimension, row + 1, column, new_path); // DOWN
+      generate_all_paths(maze, dimension, row - 1, column, new_path); // UP
+      maze[row][column].visited = 'n';
+		  return;
+    }
   }
 }
 
