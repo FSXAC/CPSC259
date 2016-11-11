@@ -46,7 +46,7 @@ int main ( void )
    to test your mazesolver with our sample mazes. */
 	error = fopen_s( &maze_file, MAZE3877, "r" );
 	if ( error ) {
-		fprintf( stderr, "Unable to open file: %s\n", MAZE1 );
+    fprintf(stderr, "Unable to open file: %s\n", MAZE3877);
 		system( "pause" );
 		return 1;
 	}
@@ -172,7 +172,7 @@ maze_cell** parse_maze( FILE * maze_file, int dimension )
             THEN paths contains the path from start to finish.
  */
 
-void generate_all_paths( maze_cell ** maze, int dimension, int row, int column, char * path )
+void generate_all_paths(maze_cell ** maze, int dimension, int row, int column, char * path)
 {
 	/* Variables */
 	int path_length   = 0;
@@ -200,27 +200,27 @@ void generate_all_paths( maze_cell ** maze, int dimension, int row, int column, 
 		5. concatenate old path to new path
 		6. concatenate new point to new path */
   else {
-  	path_length = strlen( path );
-    new_path  = ( char * ) calloc( path_length + 2, sizeof( char ) );
-  	new_point = ( char * ) calloc( 2, sizeof( char ) );
+  	path_length = strlen(path);
+    new_path  = (char *) calloc(path_length + 2, sizeof(char));
+  	new_point = (char *) calloc(2, sizeof(char));
   	new_point[0] = maze[row][column].character;
 
-    // if path length is not 0
-    if ( path_length ) {
-    	new_path = strcat( new_path, path );
+    // if path is not empty, add path to new path
+    if (path_length) {
+    	new_path = strcat(new_path, path);
     }
 
     // add point to new path
-    new_path = strcat( new_path, new_point );
+    new_path = strcat(new_path, new_point);
 
     // if it's at the right location
-    if ( column == ( dimension - 1 ) ) {
+    if (column == (dimension - 1)) {
       // Reallocate memory in global paths array to make room for a new solution string
-  		paths = ( char ** ) realloc ( paths, ( paths_found + 1 ) * sizeof( char* ) );
-      paths[paths_found] = ( char * ) calloc( strlen( new_path ) + 1, sizeof( char ));
+  		paths = (char **)realloc(paths, (paths_found + 1) * sizeof(char *));
+      paths[paths_found] = (char *)calloc(strlen(new_path) + 1, sizeof(char));
 
       // Copy the solution path to the location of new string
-      strcpy( paths[paths_found], new_path );
+      strcpy(paths[paths_found], new_path);
 
       // Increment paths counter
   		paths_found++;
