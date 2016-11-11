@@ -52,24 +52,21 @@ int main ( void )
 	}
 
   if ( maze_file ) {
-
-	/* Calls the functions that:
-	   a) get the size of the maze and stores it in the dimension variable
-	   b) copies the maze into memory */
-	dimension = get_maze_dimension(maze_file);
-  maze = parse_maze(maze_file, dimension);
-
+  	/* Calls the functions that:
+  	   a) get the size of the maze and stores it in the dimension variable
+  	   b) copies the maze into memory */
+  	dimension = get_maze_dimension(maze_file);
+    maze = parse_maze(maze_file, dimension);
   } else {
-	fprintf( stderr, "Unable to parse maze file: %s\n", MAZE1 );
-	system( "pause" );
-	return 1;
+	  fprintf( stderr, "Unable to parse maze file: %s\n", MAZE1 );
+	  system( "pause" );
+	  return 1;
   }
 
   /* Traverses maze and generates all solutions */
 	generate_all_paths(maze, dimension, 0, 0, paths);
 
 	/* Calculates and displays required data */
-  printf("%d\n", path_cost("123"));
 
   /* Ends main function */
 	system( "pause" );
@@ -147,7 +144,7 @@ maze_cell** parse_maze( FILE * maze_file, int dimension )
     while ( fgets ( line_buffer, BUFFER, maze_file ) ) {
       for ( column = 0; column < dimension; ++column ) {
         maze[row][column].character = line_buffer[column];
-        maze[row][column].visited = 'n';
+        maze[row][column].visited = UNVISITED;
   		}
       row++;
     }
@@ -173,6 +170,7 @@ maze_cell** parse_maze( FILE * maze_file, int dimension )
  POST:      IF current coordinate is at maze finish line (right boundary)
             THEN paths contains the path from start to finish.
  */
+
 void generate_all_paths( maze_cell ** maze, int dimension, int row, int column, char * path )
 {
 	/* Variables */
@@ -202,7 +200,7 @@ void generate_all_paths( maze_cell ** maze, int dimension, int row, int column, 
 		6. concatenate new point to new path */
   else {
   	path_length = strlen( path );
-    new_path =  ( char * ) calloc( path_length + 2, sizeof( char ) );
+    new_path  = ( char * ) calloc( path_length + 2, sizeof( char ) );
   	new_point = ( char * ) calloc( 2, sizeof( char ) );
   	new_point[0] = maze[row][column].character;
 
@@ -215,14 +213,14 @@ void generate_all_paths( maze_cell ** maze, int dimension, int row, int column, 
 
     // if it's at the right location
     if ( column == ( dimension - 1 ) ) {
-  		/* 1. Reallocate memory in global paths array to make room
-  		      for a new solution string
-  		   2. Copy the solution path to the location of new string
-  		   3. Increment paths counter */
+      // Reallocate memory in global paths array to make room for a new solution string
   		paths = ( char ** ) realloc ( paths, ( paths_found + 1 ) * sizeof( char* ) );
-      paths[paths_found] = ( char* ) calloc( strlen( new_path ) + 1, sizeof( char ));
+      paths[paths_found] = ( char * ) calloc( strlen( new_path ) + 1, sizeof( char ));
 
+      // Copy the solution path to the location of new string
       strcpy( paths[paths_found], new_path );
+
+      // Increment paths counter
   		paths_found++;
       return;
     } else {
@@ -307,15 +305,15 @@ void display_cheapest_path()
 	int i, j, cost;
   int cheapest = NULL;
 
-  for (i = 0; i < path_found; i++) {
+  for (i = 0; i < paths_found; i++) {
     j = 0;
     cost = 0;
 
     // count the cost
-    while (path[i][j] != '\0') cost += (path[i][j++] - '0');
+    while (paths[i][j] != '\0') cost += (paths[i][j++] - '0');
 
     // find min
-    cheapest = (cheapest == NULL) ? cost : (cheapest > cost) : cheapest;
+    cheapest = (cheapest == NULL) ? cost : (cheapest > cost) ? cost : cheapest;
   }
 
   // printout path
