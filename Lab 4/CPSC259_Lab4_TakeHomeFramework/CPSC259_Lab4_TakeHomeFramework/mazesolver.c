@@ -64,6 +64,7 @@ int main ( void )
   }
 
   /* Traverses maze and generates all solutions */
+  paths = "";
 	generate_all_paths(maze, dimension, 0, 0, paths);
 
 	/* Calculates and displays required data */
@@ -209,6 +210,7 @@ void generate_all_paths( maze_cell ** maze, int dimension, int row, int column, 
     	new_path = strcat( new_path, path );
     }
 
+    // add point to new path
     new_path = strcat( new_path, new_point );
 
     // if it's at the right location
