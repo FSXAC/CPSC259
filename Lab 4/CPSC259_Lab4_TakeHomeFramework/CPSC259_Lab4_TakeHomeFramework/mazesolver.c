@@ -64,10 +64,12 @@ int main ( void )
   }
 
   /* Traverses maze and generates all solutions */
-  paths = "";
-	generate_all_paths(maze, dimension, 0, 0, paths);
+	generate_all_paths(maze, dimension, 0, 0, "");
 
 	/* Calculates and displays required data */
+  display_shortest_path();
+  display_cheapest_path();
+
 
   /* Ends main function */
 	system( "pause" );
@@ -152,90 +154,159 @@ maze_cell** parse_maze( FILE * maze_file, int dimension )
 	return maze;
 }
 
+
+// void generate_all_paths(maze_cell ** maze, int dimension, int row, int column, char * path)
+// {
+// 	/* Variables */
+// 	int path_length   = 0;
+// 	char * new_point  = NULL;
+// 	char * new_path   = NULL;
+//
+//   /* Checks for base cases */
+//   // if the point we're looking at is either a wall or a point already visited
+//   // if the point is outside the maze
+//   if (maze[row][column].character == MAZE_WALL || maze[row][column].visited == VISITED ||
+//       row > dimension - 1 || row < 0 || column > dimension - 1 || column < 0) {
+//     return;
+//   }
+//
+//   /* Otherwise deals with the recursive case.  Pushes the current coordinate onto the path
+//    and checks to see if the right boundary of the maze has been reached
+//    IF   right boundary reached
+//    THEN path is added to the list as a successful path and function returns
+//    ELSE the current location is marked as used and the search continues
+//         in each cardinal direction using a recursive call using these steps:
+// 		1. get length of path
+// 		2. allocate space for a larger new path
+// 		3. allocate space for a new point to add to the path
+// 		4. assign the value in the maze cell to the new point
+// 		5. concatenate old path to new path
+// 		6. concatenate new point to new path */
+//   else {
+//   	path_length = strlen(path);
+//     new_path  = (char *) calloc(path_length + 2, sizeof(char));
+//   	new_point = (char *) calloc(2, sizeof(char));
+//   	new_point[0] = maze[row][column].character;
+//
+//     // if path is not empty, add path to new path
+//     if (path_length) {
+//     	new_path = strcat(new_path, path);
+//     }
+//
+//     // add point to new path
+//     new_path = strcat(new_path, new_point);
+//
+//     // if it's at the right location
+//     if (column == (dimension - 1)) {
+//       // Reallocate memory in global paths array to make room for a new solution string
+//   		paths = (char **)realloc(paths, (paths_found + 1) * sizeof(char *));
+//       paths[paths_found] = (char *)calloc(strlen(new_path) + 1, sizeof(char));
+//
+//       // Copy the solution path to the location of new string
+//       strcpy(paths[paths_found], new_path);
+//
+//       // Increment paths counter
+//   		paths_found++;
+//       return;
+//     } else {
+//   		/* 1. Mark point as visited
+//   		   2. Recursively search in each direction using the new path
+//   		   3. Mark point as unvisited */
+//       maze[row][column].visited = VISITED;
+//       generate_all_paths(maze, dimension, row, column + 1, new_path); // RIGHT
+//       generate_all_paths(maze, dimension, row, column - 1, new_path); // LEFT
+//       generate_all_paths(maze, dimension, row + 1, column, new_path); // DOWN
+//       generate_all_paths(maze, dimension, row - 1, column, new_path); // UP
+//       maze[row][column].visited = UNVISITED;
+// 		  return;
+//     }
+//   }
+// }
+
 /**
- Generates all paths through a maze recursively.
- PARAM:     pointer to a 2D array of maze_cell
- PARAM:     dimension of the square maze
- PARAM:     starting position row
- PARAM:     starting position column
- PARAM:     pointer to a string of chars which contains the 'current' path
- PRE:       maze contains a representation of the maze
- PRE:       dimension contains the correct dimension of the maze
- PRE:       row contains a valid row coordinate
- PRE:       column contains a valid column coordinate
- PRE:       path contains a sequence of characters (the first time you invoke this
-            function, the passed parameter should be an empty string, e.g., "" (not NULL)
- POST:      IF current coordinate is not out of maze bounds &&
-               current coordinate is not a wall
-            THEN path contains current coordinate
- POST:      IF current coordinate is at maze finish line (right boundary)
-            THEN paths contains the path from start to finish.
- */
+Generates all paths through a maze recursively.
+PARAM:     pointer to a 2D array of maze_cell
+PARAM:     dimension of the square maze
+PARAM:     starting position row
+PARAM:     starting position column
+PARAM:     pointer to a string of chars which contains the 'current' path
+PRE:       maze contains a representation of the maze
+PRE:       dimension contains the correct dimension of the maze
+PRE:       row contains a valid row coordinate
+PRE:       column contains a valid column coordinate
+PRE:       path contains a sequence of characters (the first time you invoke this
+function, the passed parameter should be an empty string, e.g., "" (not NULL)
+POST:      IF current coordinate is not out of maze bounds &&
+current coordinate is not a wall
+THEN path contains current coordinate
+POST:      IF current coordinate is at maze finish line (right boundary)
+THEN paths contains the path from start to finish.
+*/
+void generate_all_paths(
+  maze_cell ** maze,
+  int dimension,
+  int row, int column,
+  char * path) {
 
-void generate_all_paths(maze_cell ** maze, int dimension, int row, int column, char * path)
-{
-	/* Variables */
-	int path_length   = 0;
-	char * new_point  = NULL;
-	char * new_path   = NULL;
+  // local variables
+  int path_length  = 0;
+  char * new_point = NULL;
+  char * new_path  = NULL;
 
-  /* Checks for base cases */
-  // if the point we're looking at is either a wall or a point already visited
-  // if the point is outside the maze
-  if (maze[row][column].character == MAZE_WALL || maze[row][column].visited == VISITED ||
-      row > dimension - 1 || row < 0 || column > dimension - 1 || column < 0) {
-    return;
-  }
+  // base cases
+  if (row    > dimension - 1                   ||
+      row    < 0                               ||
+      column > dimension - 1                   ||
+      column < 0                               ||
+      maze[row][column].character == MAZE_WALL ||
+      maze[row][column].visited   == VISITED) return;
 
-  /* Otherwise deals with the recursive case.  Pushes the current coordinate onto the path
-   and checks to see if the right boundary of the maze has been reached
-   IF   right boundary reached
-   THEN path is added to the list as a successful path and function returns
-   ELSE the current location is marked as used and the search continues
-        in each cardinal direction using a recursive call using these steps:
-		1. get length of path
-		2. allocate space for a larger new path
-		3. allocate space for a new point to add to the path
-		4. assign the value in the maze cell to the new point
-		5. concatenate old path to new path
-		6. concatenate new point to new path */
   else {
-  	path_length = strlen(path);
-    new_path  = (char *) calloc(path_length + 2, sizeof(char));
-  	new_point = (char *) calloc(2, sizeof(char));
-  	new_point[0] = maze[row][column].character;
+    // get length of existing path
+    path_length = strlen(path);
 
-    // if path is not empty, add path to new path
+    // allocate space for a larger new path
+    new_path = (char *)calloc(path_length + 2, sizeof(char));
+    // allocate space for a new point to add to path
+    new_point = (char *)calloc(2, sizeof(char));
+
+    // assign the value in the maze cell to new point
+    new_point[0] = maze[row][column].character;
+
+    // concatenate old path to new path
     if (path_length) {
-    	new_path = strcat(new_path, path);
+      new_path = strcat(new_path, path);
     }
 
-    // add point to new path
+    // concat new pt to new path
     new_path = strcat(new_path, new_point);
 
-    // if it's at the right location
     if (column == (dimension - 1)) {
-      // Reallocate memory in global paths array to make room for a new solution string
-  		paths = (char **)realloc(paths, (paths_found + 1) * sizeof(char *));
+      // at the end of maze
+      // reallocate mem to make room for a new solution
+      paths = (char **)realloc(paths, (paths_found + 1) * sizeof(char *));
       paths[paths_found] = (char *)calloc(strlen(new_path) + 1, sizeof(char));
 
-      // Copy the solution path to the location of new string
+      // copy the solution to the newly allocated mem
       strcpy(paths[paths_found], new_path);
 
-      // Increment paths counter
-  		paths_found++;
+      // increment path counter
+      paths_found++;
       return;
     } else {
-  		/* 1. Mark point as visited
-  		   2. Recursively search in each direction using the new path
-  		   3. Mark point as unvisited */
+      // not at the end
+      // mark point as visited
       maze[row][column].visited = VISITED;
-      generate_all_paths(maze, dimension, row, column + 1, new_path); // RIGHT
-      generate_all_paths(maze, dimension, row, column - 1, new_path); // LEFT
-      generate_all_paths(maze, dimension, row + 1, column, new_path); // DOWN
-      generate_all_paths(maze, dimension, row - 1, column, new_path); // UP
+
+      // recursively explore nearby
+      generate_all_paths(maze, dimension, row, column + 1, new_path);
+      generate_all_paths(maze, dimension, row, column - 1, new_path);
+      generate_all_paths(maze, dimension, row + 1, column, new_path);
+      generate_all_paths(maze, dimension, row - 1, column, new_path);
+
+      // mark point as unvisited
       maze[row][column].visited = UNVISITED;
-		  return;
+      return;
     }
   }
 }
@@ -273,24 +344,21 @@ int path_cost ( char * path_string )
  */
 void display_shortest_path ( )
 {
-  int i, j;
-  int shortest = NULL;
+  int path, path_length;
+  int shortest = -1;
 
-  for (i = 0; i < paths_found; i++) {
-    j = 0;
-
-    // count the length of path
-    while (paths[i][j++] != '\0');
+  for (path = 0; path < paths_found; path++) {
+     path_lenght = strlen(paths[path]);
 
     // find min
-    shortest = (shortest == NULL) ? j : (shortest > j) ? i : shortest;
+    shortest = (shortest == -1) ?
+      path_lenght : (shortest > path_lenght) ?
+        path : shortest;
   }
 
   // print out the path
   i = 0;
-  printf("Shortest path: ");
-  while (paths[shortest][i] != '\0') printf("%c", paths[shortest][i++]);
-  printf("\n");
+  printf("Shortest path: %s\n\n", paths[shortest]);
 }
 
 /*
@@ -305,7 +373,7 @@ void display_shortest_path ( )
 void display_cheapest_path()
 {
 	int i, j, cost;
-  int cheapest = NULL;
+  int cheapest = -1;
 
   for (i = 0; i < paths_found; i++) {
     j = 0;
@@ -315,7 +383,7 @@ void display_cheapest_path()
     while (paths[i][j] != '\0') cost += (paths[i][j++] - '0');
 
     // find min
-    cheapest = (cheapest == NULL) ? cost : (cheapest > cost) ? cost : cheapest;
+    cheapest = (cheapest == -1) ? cost : (cheapest > cost) ? cost : cheapest;
   }
 
   // printout path
