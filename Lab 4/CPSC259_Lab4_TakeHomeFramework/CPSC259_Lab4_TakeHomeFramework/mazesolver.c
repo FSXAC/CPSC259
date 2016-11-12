@@ -32,24 +32,25 @@ int main ( void )
 {
   /* Variables */
   int          dimension = 0;
-	int          error = 0;
-	FILE       * maze_file = NULL;
+  int          error = 0;
+  FILE       * maze_file = NULL;
   maze_cell ** maze      = NULL;
 
-	/* Initializes the global variables */
-	paths       = NULL;
-	paths_found = 0;
+  /* Initializes the global variables */
+  paths       = NULL;
+  paths_found = 0;
 
 
   /* Opens and parses the maze file.  Replace the 2nd parameter of fopen_s with
    different file names defined in the preprocessor section of the header file
-   to test your mazesolver with our sample mazes. */
-	error = fopen_s( &maze_file, MAZE1, "r" );
-	if ( error ) {
+   to test your mazesolver with our sample mazes.
+   */
+  error = fopen_s( &maze_file, MAZE1, "r" );
+  if ( error ) {
     fprintf(stderr, "Unable to open file: %s\n", MAZE1);
-		system( "pause" );
-		return 1;
-	}
+    system( "pause" );
+    return 1;
+  }
 
   if ( maze_file ) {
   	/* Calls the functions that:
@@ -58,21 +59,21 @@ int main ( void )
   	dimension = get_maze_dimension(maze_file);
     maze = parse_maze(maze_file, dimension);
   } else {
-	  fprintf( stderr, "Unable to parse maze file: %s\n", MAZE1 );
-	  system( "pause" );
-	  return 1;
+    fprintf( stderr, "Unable to parse maze file: %s\n", MAZE1 );
+    system( "pause" );
+    return 1;
   }
 
   /* Traverses maze and generates all solutions */
-	generate_all_paths(maze, dimension, 0, 0, "");
+  generate_all_paths(maze, dimension, 0, 0, "");
 
-	/* Calculates and displays required data */
+  /* Calculates and displays required data */
   display_shortest_path();
   display_cheapest_path();
 
 
   /* Ends main function */
-	system( "pause" );
+  system( "pause" );
   return 0;
 }
 
@@ -87,14 +88,14 @@ int main ( void )
  */
 int get_maze_dimension( FILE* maze_file )  {
 
-	int  dimension = 0;
+  int  dimension = 0;
   char line_buffer[BUFFER];
 
-	dimension = strlen( fgets ( line_buffer, BUFFER, maze_file ) );
+  dimension = strlen( fgets ( line_buffer, BUFFER, maze_file ) );
 
-	/* You don't need to know this.  It 'resets' the file's internal pointer to the
-	 beginning of the file. */
-	fseek( maze_file, 0, SEEK_SET );
+  /* You don't need to know this.  It 'resets' the file's internal pointer to the
+   beginning of the file. */
+  fseek( maze_file, 0, SEEK_SET );
 
   /* Checks if text file was created in Windows and contains '\r'
    IF TRUE reduce strlen by 2 in order to omit '\r' and '\n' from each line
@@ -110,14 +111,14 @@ int get_maze_dimension( FILE* maze_file )  {
  Parses and stores maze as a 2D array of maze_cell.  This requires a few steps:
  1) Allocating memory for a 2D array of maze_cell, e.g., maze_cell[rows][columns]
     a) Dynamically allocates memory for 'dimension' pointers to maze_cell, and assign
-	   the memory (case as a double pointer to maze_cell) to maze, which is a
-	   double pointer to maze_cell (this makes the maze[rows] headers)
-	b) For each row of the maze, dynamically allocate memory for 'dimension' maze_cells
-	   and assign it (cast as a pointer to maze_cell) to maze[row]
+     the memory (case as a double pointer to maze_cell) to maze, which is a
+     double pointer to maze_cell (this makes the maze[rows] headers)
+  b) For each row of the maze, dynamically allocate memory for 'dimension' maze_cells
+     and assign it (cast as a pointer to maze_cell) to maze[row]
  2) Copying the file to the allocated space
     a) For each row obtained from the file using fgets and temporarily stored in line_buffer
-	   i) For each of the 'dimension' columns in that row
-	   ii)Assign the character from the file to the struct, and set the struct to unvisited
+     i) For each of the 'dimension' columns in that row
+     ii)Assign the character from the file to the struct, and set the struct to unvisited
  3) Returns the double pointer called maze.
  PARAM:  maze_file pointer to an open filestream
  PARAM:  dimension pointer to an int
@@ -129,11 +130,11 @@ int get_maze_dimension( FILE* maze_file )  {
  */
 maze_cell** parse_maze( FILE * maze_file, int dimension )
 {
-	/* Variables */
+  /* Variables */
   char         line_buffer[BUFFER];
-	int          row = 0,
-		           column = 0;
-	maze_cell ** maze = NULL;
+  int          row = 0,
+               column = 0;
+  maze_cell ** maze = NULL;
 
   /* Allocates memory for correctly-sized maze */
   maze = (maze_cell **) calloc(dimension * dimension, sizeof(maze_cell));
@@ -143,7 +144,7 @@ maze_cell** parse_maze( FILE * maze_file, int dimension )
   }
 
   /* Copies maze file to memory */
-	row = 0;
+  row = 0;
     while ( fgets ( line_buffer, BUFFER, maze_file ) ) {
       for ( column = 0; column < dimension; ++column ) {
         maze[row][column].character = line_buffer[column];
@@ -151,7 +152,7 @@ maze_cell** parse_maze( FILE * maze_file, int dimension )
   		}
       row++;
     }
-	return maze;
+  return maze;
 }
 
 /*
@@ -260,7 +261,7 @@ void generate_all_paths(
  RETURN: the 'cost' of the path.
  */
 int path_cost(char * path_string) {
-	int index = 0, cost = 0;
+  int index = 0, cost = 0;
   int length = strlen(path_string);
 
   // add str -> int value to cost sum;
