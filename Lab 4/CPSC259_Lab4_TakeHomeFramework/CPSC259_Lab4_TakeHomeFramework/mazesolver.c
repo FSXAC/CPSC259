@@ -154,76 +154,7 @@ maze_cell** parse_maze( FILE * maze_file, int dimension )
 	return maze;
 }
 
-
-// void generate_all_paths(maze_cell ** maze, int dimension, int row, int column, char * path)
-// {
-// 	/* Variables */
-// 	int path_length   = 0;
-// 	char * new_point  = NULL;
-// 	char * new_path   = NULL;
-//
-//   /* Checks for base cases */
-//   // if the point we're looking at is either a wall or a point already visited
-//   // if the point is outside the maze
-//   if (maze[row][column].character == MAZE_WALL || maze[row][column].visited == VISITED ||
-//       row > dimension - 1 || row < 0 || column > dimension - 1 || column < 0) {
-//     return;
-//   }
-//
-//   /* Otherwise deals with the recursive case.  Pushes the current coordinate onto the path
-//    and checks to see if the right boundary of the maze has been reached
-//    IF   right boundary reached
-//    THEN path is added to the list as a successful path and function returns
-//    ELSE the current location is marked as used and the search continues
-//         in each cardinal direction using a recursive call using these steps:
-// 		1. get length of path
-// 		2. allocate space for a larger new path
-// 		3. allocate space for a new point to add to the path
-// 		4. assign the value in the maze cell to the new point
-// 		5. concatenate old path to new path
-// 		6. concatenate new point to new path */
-//   else {
-//   	path_length = strlen(path);
-//     new_path  = (char *) calloc(path_length + 2, sizeof(char));
-//   	new_point = (char *) calloc(2, sizeof(char));
-//   	new_point[0] = maze[row][column].character;
-//
-//     // if path is not empty, add path to new path
-//     if (path_length) {
-//     	new_path = strcat(new_path, path);
-//     }
-//
-//     // add point to new path
-//     new_path = strcat(new_path, new_point);
-//
-//     // if it's at the right location
-//     if (column == (dimension - 1)) {
-//       // Reallocate memory in global paths array to make room for a new solution string
-//   		paths = (char **)realloc(paths, (paths_found + 1) * sizeof(char *));
-//       paths[paths_found] = (char *)calloc(strlen(new_path) + 1, sizeof(char));
-//
-//       // Copy the solution path to the location of new string
-//       strcpy(paths[paths_found], new_path);
-//
-//       // Increment paths counter
-//   		paths_found++;
-//       return;
-//     } else {
-//   		/* 1. Mark point as visited
-//   		   2. Recursively search in each direction using the new path
-//   		   3. Mark point as unvisited */
-//       maze[row][column].visited = VISITED;
-//       generate_all_paths(maze, dimension, row, column + 1, new_path); // RIGHT
-//       generate_all_paths(maze, dimension, row, column - 1, new_path); // LEFT
-//       generate_all_paths(maze, dimension, row + 1, column, new_path); // DOWN
-//       generate_all_paths(maze, dimension, row - 1, column, new_path); // UP
-//       maze[row][column].visited = UNVISITED;
-// 		  return;
-//     }
-//   }
-// }
-
-/**
+/*
 Generates all paths through a maze recursively.
 PARAM:     pointer to a 2D array of maze_cell
 PARAM:     dimension of the square maze
@@ -248,12 +179,12 @@ void generate_all_paths(
   int row, int column,
   char * path) {
 
-  // local variables
+  /* Variables */
   int path_length  = 0;
   char * new_point = NULL;
   char * new_path  = NULL;
 
-  // check for base cases
+  /* Checks for base cases */
   if (row    > dimension - 1                   ||     // row or col is outside the grid
       row    < 0                               ||     //
       column > dimension - 1                   ||     //
@@ -261,6 +192,12 @@ void generate_all_paths(
       maze[row][column].character == MAZE_WALL ||     // it's a wall or a point already visted
       maze[row][column].visited   == VISITED) return;
 
+  /* Otherwise deals with the recursive case.  Pushes the current coordinate onto the path
+  //    and checks to see if the right boundary of the maze has been reached
+  //    IF   right boundary reached
+  //    THEN path is added to the list as a successful path and function returns
+  //    ELSE the current location is marked as used and the search continues
+  //         in each cardinal direction using a recursive call */
   else {
     // get length of existing path
     path_length = strlen(path);
