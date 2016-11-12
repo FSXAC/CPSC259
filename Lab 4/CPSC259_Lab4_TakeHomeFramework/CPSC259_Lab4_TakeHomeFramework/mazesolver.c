@@ -44,9 +44,9 @@ int main ( void )
   /* Opens and parses the maze file.  Replace the 2nd parameter of fopen_s with
    different file names defined in the preprocessor section of the header file
    to test your mazesolver with our sample mazes. */
-	error = fopen_s( &maze_file, MAZE3877, "r" );
+	error = fopen_s( &maze_file, MAZE1, "r" );
 	if ( error ) {
-    fprintf(stderr, "Unable to open file: %s\n", MAZE3877);
+    fprintf(stderr, "Unable to open file: %s\n", MAZE1);
 		system( "pause" );
 		return 1;
 	}
@@ -253,12 +253,12 @@ void generate_all_paths(
   char * new_point = NULL;
   char * new_path  = NULL;
 
-  // base cases
-  if (row    > dimension - 1                   ||
-      row    < 0                               ||
-      column > dimension - 1                   ||
-      column < 0                               ||
-      maze[row][column].character == MAZE_WALL ||
+  // check for base cases
+  if (row    > dimension - 1                   ||     // row or col is outside the grid
+      row    < 0                               ||     //
+      column > dimension - 1                   ||     //
+      column < 0                               ||     //
+      maze[row][column].character == MAZE_WALL ||     // it's a wall or a point already visted
       maze[row][column].visited   == VISITED) return;
 
   else {
@@ -267,6 +267,7 @@ void generate_all_paths(
 
     // allocate space for a larger new path
     new_path = (char *)calloc(path_length + 2, sizeof(char));
+
     // allocate space for a new point to add to path
     new_point = (char *)calloc(2, sizeof(char));
 
@@ -321,17 +322,12 @@ void generate_all_paths(
  PRE:    path_string is a pointer to a null-terminated array of char (a string)
  RETURN: the 'cost' of the path.
  */
-int path_cost ( char * path_string )
-{
-	int i = 0;
-  int strlength = strlen(path_string);
-  int cost = 0;
+int path_cost(char * path_string) {
+	int index = 0, cost = 0;
+  int length = strlen(path_string);
 
   // add str -> int value to cost sum;
-  while (i < strlength) {
-    cost += path_string[i++] - '0';
-  }
-
+  while (index < length) cost += path_string[index++] - '0';
   return cost;
 }
 
@@ -342,22 +338,21 @@ int path_cost ( char * path_string )
  "Shortest path: XXXXXXXX"
  POST: prints the shortest path to standard output
  */
-void display_shortest_path ( )
+void display_shortest_path()
 {
   int path, path_length;
   int shortest = -1;
 
   for (path = 0; path < paths_found; path++) {
-     path_lenght = strlen(paths[path]);
+    path_length = strlen(paths[path]);
 
     // find min
     shortest = (shortest == -1) ?
-      path_lenght : (shortest > path_lenght) ?
+      path : (strlen(paths[shortest]) > path_length) ?
         path : shortest;
   }
 
   // print out the path
-  i = 0;
   printf("Shortest path: %s\n\n", paths[shortest]);
 }
 
@@ -372,29 +367,22 @@ void display_shortest_path ( )
  */
 void display_cheapest_path()
 {
-	int i, j, cost;
+  int path, cost;
   int cheapest = -1;
 
-  for (i = 0; i < paths_found; i++) {
-    j = 0;
-    cost = 0;
-
-    // count the cost
-    while (paths[i][j] != '\0') cost += (paths[i][j++] - '0');
+  for (path = 0; path < paths_found; path++) {
+    // get cost
+    cost = path_cost(paths[path]);
 
     // find min
-    cheapest = (cheapest == -1) ? cost : (cheapest > cost) ? cost : cheapest;
+    cheapest = (cheapest == -1) ?
+      path : (path_cost(paths[cheapest]) > cost) ?
+        path : cheapest;
   }
 
-  // printout path
-  i = 0;
-  cost = 0;
-  printf("Cheapest path: ");
-  while (paths[cheapest][i] != '\0')  {
-    printf("%c", paths[cheapest][i]);
-    cost += (paths[cheapest][i++] - '0');
-  }
-  printf("\nCheapest path costs: %d\n", cost);
+  // printout path and its cost
+  printf("Cheapest path: %s\n", paths[cheapest]);
+  printf("\nCheapest path costs: %d\n\n", path_cost(paths[cheapest]));
 }
 
 /* End of file */
