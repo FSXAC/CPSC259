@@ -45,9 +45,9 @@ int main ( void )
    different file names defined in the preprocessor section of the header file
    to test your mazesolver with our sample mazes.
    */
-  error = fopen_s( &maze_file, MAZE1, "r" );
+  error = fopen_s( &maze_file, MAZE3877, "r" );
   if ( error ) {
-    fprintf(stderr, "Unable to open file: %s\n", MAZE1);
+    fprintf(stderr, "Unable to open file: %s\n", MAZE3877);
     system( "pause" );
     return 1;
   }
@@ -68,6 +68,7 @@ int main ( void )
   generate_all_paths(maze, dimension, 0, 0, "");
 
   /* Calculates and displays required data */
+  printf("Total number of solutions:\t%d\n", paths_found);
   display_shortest_path();
   display_cheapest_path();
 
@@ -291,7 +292,7 @@ void display_shortest_path()
   }
 
   // print out the path
-  printf("Shortest path: %s\n\n", paths[shortest]);
+  printf("Shortest path:\t\t\t%s\n", paths[shortest]);
 }
 
 /*
@@ -319,8 +320,8 @@ void display_cheapest_path()
   }
 
   // printout path and its cost
-  printf("Cheapest path: %s\n", paths[cheapest]);
-  printf("\nCheapest path costs: %d\n\n", path_cost(paths[cheapest]));
+  printf("Cheapest path:\t\t\t%s\n", paths[cheapest]);
+  printf("Cheapest path costs:\t\t%d\n\n", path_cost(paths[cheapest]));
 }
 
 /* End of file */
