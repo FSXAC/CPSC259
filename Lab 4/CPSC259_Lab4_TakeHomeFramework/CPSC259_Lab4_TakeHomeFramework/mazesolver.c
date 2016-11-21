@@ -1,10 +1,10 @@
 /*
  File:              mazesolver.c
- Purpose:           Add a brief description
- Author:			Muchen He, Henry Mao
- Student #s:		44638154 and XXXXXXXX
- CS Accounts:		p5h0b and XXXXX
- Date:				2016-11-06
+ Purpose:           Using recursive to solve a maze
+ Author:			      Muchen He, Henry Mao
+ Student #s:		    44638154 and 26110156
+ CS Accounts:		    p5h0b and r0p0b
+ Date:				      2016-11-06
  */
 
 
@@ -32,7 +32,7 @@ int main ( void )
 {
   /* Variables */
   int          dimension = 0;
-  int          error = 0;
+  int          error     = 0;
   FILE       * maze_file = NULL;
   maze_cell ** maze      = NULL;
 
@@ -149,7 +149,7 @@ maze_cell** parse_maze( FILE * maze_file, int dimension )
     while ( fgets ( line_buffer, BUFFER, maze_file ) ) {
       for ( column = 0; column < dimension; ++column ) {
         maze[row][column].character = line_buffer[column];
-        maze[row][column].visited = UNVISITED;
+        maze[row][column].visited   = UNVISITED;
   		}
       row++;
     }

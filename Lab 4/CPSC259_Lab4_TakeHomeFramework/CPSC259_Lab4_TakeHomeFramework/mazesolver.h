@@ -1,10 +1,10 @@
 /*
  File:              mazesolver.h
- Purpose:           Contains constants, prototypes, globals
- Author:			Muchen He, Henry Mao
- Student #s:		44638154 and xxxxxxxx
- CS Accounts:		p5h0b and xxxxx
- Date:				2016-11-06
+ Purpose:           Using recursive to solve a maze
+ Author:			      Muchen He, Henry Mao
+ Student #s:		    44638154 and 26110156
+ CS Accounts:		    p5h0b and r0p0b
+ Date:				      2016-11-06
  */
 
 /******************************************************************
@@ -50,5 +50,5 @@ maze_cell ** parse_maze            ( FILE * maze_file, int dimension );
 int          get_maze_dimension    ( FILE * maze_file );
 void         generate_all_paths    ( maze_cell ** maze, int dimension, int row, int column, char * path );
 int          path_cost             ( char * path_string );
-void		 display_shortest_path ( );
-void		 display_cheapest_path ( );
+void		     display_shortest_path ( );
+void		     display_cheapest_path ( );
