@@ -19,7 +19,7 @@
 #define BUFSIZE 256
 
 // main function
-int main(void) {
+int notmain(void) {
   /* Initial variables */
   Engine *ep         = NULL;
   mxArray *testArray = NULL;
@@ -51,14 +51,13 @@ int main(void) {
     END;
   }
 
-/*using matlab engine to get eigenvalues */
+  /* using matlab engine to get eigenvalues */
   if (engEvalString(ep,"testArrayEigen = eig(testArray)")) {
-    /* code */
     fprintf(stderr,"\nError calculating eigenvalues  \n");
     END;
   }
 
-/* using the enginegetvariable to retrieve the eigenvector */
+  /* using the enginegetvariable to retrieve the eigenvector */
   printf("\nRetrieving eigenvalues\n");
   if((result = engGetVariable(ep,"testArrayEigen")) == NULL){
     fprintf(stderr,"\nFail to retrieve eigenvalue vector\n");

@@ -18,5 +18,8 @@
     <ClCompile Include="pagerank.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="pagerank_todo3.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
