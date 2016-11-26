@@ -20,6 +20,7 @@
 
 /* Function prototypes */
 void printMatrix(mxArray *matrix);
+void printLocalBuffer(Engine *ep);
 
 // main function
 int main(void) {
@@ -47,9 +48,6 @@ int main(void) {
     {2.0, 3.0, 4.0},
     {2.0, 3.0, 4.0}
   };
-
-  /* Buffer for capturing MATLAB output */
-  char buffer[BUFSIZE + 1];
 
   /* Start a matlab process */
   if (!(ep = engOpen(NULL))) {
@@ -116,7 +114,7 @@ int main(void) {
   }
 
   /* Send a command to do matrix multiplication */
-  if (engEvalString(ep, "matrixProduct = matOne * matTwo")) {
+  if (engEvalString(ep, "matrixProduct = matOne' * matTwo'")) {
     fprintf(stderr, "\nCannot do matrix multiplication\n");
     END(1);
   }
@@ -132,17 +130,7 @@ int main(void) {
     printMatrix(result);
   }
 
-  /* Capture the output by using local buffer */
-  /* Add a null terminating character to string returned by engEvalString */
-  printf("\n\n*** LOCAL BUFFER ***\n");
-  if (engOutputBuffer(ep, buffer, BUFSIZE)) {
-    fprintf(stderr, "\nCannot create buffer for MATLAB output");
-  }
-  buffer[BUFSIZE] = '\0';
-
-  /* 'whos' - MATLAB command that lists of all current variables */
-  engEvalString(ep, "whos");
-  printf("%s\n", buffer);
+  printLocalBuffer(ep);
 
   /* done, now free memory */
   mxDestroyArray(testArray);
@@ -159,8 +147,28 @@ int main(void) {
 
 void printMatrix(mxArray *matrix) {
   size_t i, j;
+  printf("/                                    \\\n");
   for(i = 0; i < 3; i++) {
+    printf("|");
     for (j = 0; j < 3; j++) printf("%12.6f", mxGetPr(matrix)[i * 3 + j]);
-    printf("\n");
+    printf("|\n");
   }
+  printf("\\                                    /\n");
+}
+
+void printLocalBuffer(Engine *ep) {
+  /* Buffer for capturing MATLAB output */
+  char buffer[BUFSIZE + 1];
+
+  /* Capture the output by using local buffer */
+  /* Add a null terminating character to string returned by engEvalString */
+  printf("\n\n*** LOCAL BUFFER ***\n");
+  if (engOutputBuffer(ep, buffer, BUFSIZE)) {
+    fprintf(stderr, "\nCannot create buffer for MATLAB output");
+  }
+  buffer[BUFSIZE] = '\0';
+
+  /* 'whos' - MATLAB command that lists of all current variables */
+  engEvalString(ep, "whos");
+  printf("%s\n", buffer);
 }
