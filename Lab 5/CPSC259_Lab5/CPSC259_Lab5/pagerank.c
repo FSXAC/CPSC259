@@ -39,14 +39,11 @@ int main(void) {
 
   /* Need to read and parse data in file to an array */
   if (webfile) {
-
-
+    // TODO HERE
   } else {
     fprintf(stderr, "Null file pointer error: %s\n", FILE_LOCATION);
     END(1);
   }
-
-
 }
 
 /* Returns number of links in the connectivity matrix (dimension)
