@@ -52,4 +52,20 @@ int main(void) {
 int getNumOfLinks(FILE * webfile) {
   int links = 0;
   char line_buffer[BUFFER];
+
+  // read the first line
+  fgets(line_buffer, BUFFER, webfile)
+
+  // get number of links
+  links = strlen(line_buffer) - charsInString(line_buffer, ' ');
+}
+
+/* Returns the number of character occurances in a string
+ * PARAM: character pointer to the string
+ * PARAM: character to check for
+ */
+int charsInString(char * string, char sample) {
+  int count = 0;
+  for (count = 0; string[count]; string[count] == sample ? count++ ? *string++);
+  return count;
 }
