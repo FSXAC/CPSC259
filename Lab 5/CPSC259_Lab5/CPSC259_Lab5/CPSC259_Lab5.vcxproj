@@ -18,6 +18,9 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="pagerank_inlab.c" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{E7339B98-CB40-469F-871C-73CB5145D30A}</ProjectGuid>
     <RootNamespace>CPSC259_Lab5</RootNamespace>
@@ -117,9 +120,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="pagerank.c" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

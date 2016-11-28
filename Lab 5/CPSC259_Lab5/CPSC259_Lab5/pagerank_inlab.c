@@ -23,7 +23,7 @@ void printMatrix(mxArray *matrix);
 void printLocalBuffer(Engine *ep);
 
 // main function
-int main_inlab(void) {
+int main(void) {
   /* Initial variables */
   Engine *ep         = NULL;
   mxArray *testArray = NULL;
