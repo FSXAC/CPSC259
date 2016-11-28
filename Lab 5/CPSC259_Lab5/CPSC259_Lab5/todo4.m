@@ -32,3 +32,23 @@ for i = [1:5]
 end
 
 % random walk probability factor
+p = 0.85;
+
+% multiply probability matrix by probability factor factor and make transition matrix
+Q = ones(5) / 5;
+M = (SMat * p) + ((1 - p) * Q);
+
+% rank vactor
+rank = ones([5, 1]);
+
+% markov process
+% multiply transition matrix M by column vector a bunch of times until it remains mostly constant
+for i = [1:10]
+  rank = M * rank;
+end
+
+% normalize
+rank = rank ./ sum(rank);
+
+% final ranking
+rank
