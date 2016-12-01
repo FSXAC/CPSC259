@@ -8,7 +8,7 @@ import random
 N = int(input("Enter number of links: "))
 
 # write to file
-file = open("weblink.txt", "w")
+file = open("web.txt", "w")
 for i in range(N):
     for j in range(N):
         if i == j:
@@ -17,5 +17,6 @@ for i in range(N):
             file.write(str(random.choice(["0", "1"])))
         if (j != N - 1):
             file.write(" ")
-    file.write("\n")
+    if (i != N - 1):
+        file.write("\n")
 file.close()

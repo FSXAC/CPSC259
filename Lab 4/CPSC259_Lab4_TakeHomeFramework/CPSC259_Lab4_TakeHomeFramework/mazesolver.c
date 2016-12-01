@@ -146,13 +146,13 @@ maze_cell** parse_maze( FILE * maze_file, int dimension )
 
   /* Copies maze file to memory */
   row = 0;
-    while ( fgets ( line_buffer, BUFFER, maze_file ) ) {
-      for ( column = 0; column < dimension; ++column ) {
-        maze[row][column].character = line_buffer[column];
-        maze[row][column].visited   = UNVISITED;
-  		}
-      row++;
-    }
+  while ( fgets ( line_buffer, BUFFER, maze_file ) ) {
+    for ( column = 0; column < dimension; ++column ) {
+      maze[row][column].character = line_buffer[column];
+      maze[row][column].visited   = UNVISITED;
+		}
+    row++;
+  }
   return maze;
 }
 

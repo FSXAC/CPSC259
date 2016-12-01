@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="pagerank_inlab.c" />
+    <ClCompile Include="pagerank.c" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{E7339B98-CB40-469F-871C-73CB5145D30A}</ProjectGuid>
