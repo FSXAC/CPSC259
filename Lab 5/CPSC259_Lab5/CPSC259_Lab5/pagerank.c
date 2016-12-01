@@ -29,11 +29,10 @@ void printMatrixPt(int **matrix, int size);
 
 /* Main function */
 int main(void) {
-  FILE *webfile       = NULL;
-  Engine *ep          = NULL;
-  mxArray *connectMat = NULL;
+  FILE *webfile          = NULL;
+  Engine *engPointer     = NULL;
+  mxArray *connectMat    = NULL;
   double **connectMatrix = NULL;
-
   int websize;
 
   /* File read */
@@ -49,6 +48,32 @@ int main(void) {
 
     // parse to 2D array
     connectMatrix = parseMatrix(webfile, websize);
+
+    // start matlab engine process
+    if (!(engPointer = engOpen(NULL))) {
+      fprintf(stderr, "\nCannot start MATLAB engine\n");
+      END(1);
+    }
+
+    // create array
+    connectMat = mxCreateDoubleMatrix(websize, websize, mxReal);
+
+    // copy connect matrix into a memory
+    memcpy(
+      (void *)mxGetPr(connectMat),
+      (void *)connectMatrix,
+      websize * websize * sizeof(double)
+    );
+
+    // copy matrix into MATLAB engine
+    if (engPutVariable(engPointer, "connectMat", connectMat)) {
+      fprintf(stderr, "\nCannot write connect matrix to MATLAB\n");
+      END(1);
+    }
+
+    // let MATLAB do its thing
+    
+
 
   } else {
     fprintf(stderr, "Null file pointer error: %s\n", FILE_LOCATION);
@@ -117,6 +142,7 @@ int ** parseMatrix(FILE * webfile, int size) {
     row++;
   }
 
+  // print initial connect matrix
   printMatrixPt(webmatrix, size);
 
   return webmatrix;
