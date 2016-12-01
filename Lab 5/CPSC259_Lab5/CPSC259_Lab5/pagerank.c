@@ -26,6 +26,7 @@ int charsInString(char * string, char sample);
 double ** parseMatrix(FILE * webfile, int size);
 void printMatrix(mxArray *matrix, int size);
 void printMatrixPt(double **matrix, int size);
+void rankpages(Engine * engPointer);
 
 /* Main function */
 int main(void) {
@@ -72,8 +73,14 @@ int main(void) {
     }
 
     // let MATLAB do its thing
+    rankpages(engPointer);
 
-
+    // close engine
+    mxDestroyArray(connectMat);
+    connectMat = NULL;
+    if (engClose(engPointer)) {
+      fprintf(stderr, "\nFailed to close MATLAB engine\n");
+    }
 
   } else {
     fprintf(stderr, "Null file pointer error: %s\n", FILE_LOCATION);
@@ -83,14 +90,58 @@ int main(void) {
   END(0);
 }
 
-int rankpages(Engine * engPointer) {
-  // get column sum
-  if (engEvalString(engPointer, "columnSum = sum(connectMat)")) {
-    fprintf(stderr,"\nError calculating eigenvalues\n");
-    END(1);
-  }
+void rankpages(Engine * engPointer) {
+  mxArray *result    = NULL;
 
-  return 0;
+  // get size of matrix
+  engEvalString(engPointer, "dimension = size(connectMat, 1)");
+
+  // get column sum
+  engEvalString(engPointer, "columnSum = sum(connectMat, 1)");
+  engEvalString(engPointer, "p = 0.85;");
+
+  // *** get stochastic matrix
+  // find non zero matrices
+  engEvalString(engPointer, "zerocolumns = find(solumnsums ~= 0)");
+
+  // generate sparse matrix with diagonal == inverse of each column sum
+  engEvalString(engPointer, "D = sparse(zerocolumns, zerocolumns, 1./columnSum(zerocolumns), dimension, dimension)");
+
+  // multiply connectivity matrix with sparse matrix
+  engEvalString(engPointer, "stoMat = connectMat * D");
+
+  // find zero clolumns of original connectivity matrix
+  engEvalString(engPointer, "[row, column] = find(columnSum == 0)");
+
+  // finish up generating stochastic matrix
+  engEvalString(engPointer, "stomat(: column) = 1 ./ dimension");
+
+  // *** get transition matrix
+  engEvalString(engPointer, "Q = ones(dimension)");
+  engEvalString(engPointer, "transMat = p * stoMat + (1 - p) * (Q / dimension)");
+  result = engGetVariable(engPointer, "transMat");
+  printMatrix(result);
+
+  // get pagerank matrix
+  engEvalString(engPointer, "rank = ones(dimension, 1)");
+
+  // multiply until rank remains constant
+  engEvalString(engPointer, "for i = 1:10 rank = transMat * rank; end");
+
+  // normalize
+  engEvalString(engPointer, "rank = rank ./ sum(rank)");
+
+
+  /* using the enginegetvariable to retrieve the eigenvector */
+  if((result = engGetVariable(engPointer,"rank")) == NULL){
+    fprintf(stderr,"\nFail to retrieve eigenvalue vector\n");
+    return;
+  } else {
+    size_t sizeOfResult = mxGetNumberOfElements(result);
+    size_t i            = 0;
+    printf("The ranks are:\n");
+    for(i = 0; i < sizeOfResult; i++) printf("%f\n", mxGetPr(result)[i]);
+  }
 }
 
 /* Returns number of links in the connectivity matrix (dimension)
@@ -161,7 +212,8 @@ double ** parseMatrix(FILE * webfile, int size) {
 /* Prints matrix
  * PARAM: the matrix in mxArray form of matlab
  */
-void printMatrix(mxArray *matrix, int size) {
+void printMatrix(mxArray *matrix) {
+  size_t size = mxGetNumberOfElements(matrix);
   size_t i, j;
   for(i = 0; i < size; i++) {
     for (j = 0; j < size; j++) printf("%-8.4f", mxGetPr(matrix)[i * size + j]);
