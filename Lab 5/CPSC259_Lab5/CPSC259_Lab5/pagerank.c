@@ -23,9 +23,9 @@
 /* Function prototypes */
 int getNumOfLinks(FILE * webfile);
 int charsInString(char * string, char sample);
-int ** parseMatrix(FILE * webfile, int size);
+double ** parseMatrix(FILE * webfile, int size);
 void printMatrix(mxArray *matrix, int size);
-void printMatrixPt(int **matrix, int size);
+void printMatrixPt(double **matrix, int size);
 
 /* Main function */
 int main(void) {
@@ -56,7 +56,7 @@ int main(void) {
     }
 
     // create array
-    connectMat = mxCreateDoubleMatrix(websize, websize, mxReal);
+    connectMat = mxCreateDoubleMatrix(websize, websize, mxREAL);
 
     // copy connect matrix into a memory
     memcpy(
@@ -72,7 +72,7 @@ int main(void) {
     }
 
     // let MATLAB do its thing
-    
+
 
 
   } else {
@@ -81,6 +81,16 @@ int main(void) {
   }
 
   END(0);
+}
+
+int rankpages(Engine * engPointer) {
+  // get column sum
+  if (engEvalString(engPointer, "columnSum = sum(connectMat)")) {
+    fprintf(stderr,"\nError calculating eigenvalues\n");
+    END(1);
+  }
+
+  return 0;
 }
 
 /* Returns number of links in the connectivity matrix (dimension)
@@ -94,7 +104,7 @@ int getNumOfLinks(FILE * webfile) {
   fseek(webfile, 0, SEEK_SET);
 
   // return length of line - total white space - 1
-  return strlen(line_buffer) - charsInString(line_buffer, ' ') - 1;
+  return (int) strlen(line_buffer) - charsInString(line_buffer, ' ') - 1;
 }
 
 /* Returns the number of character occurances in a string
@@ -117,7 +127,7 @@ int charsInString(char * string, char sample) {
  * FILE(example):  0 0 1 1 0 1 1
  *         index:  012345789ABCD
  */
-int ** parseMatrix(FILE * webfile, int size) {
+double ** parseMatrix(FILE * webfile, int size) {
   // for reading file
   char line_buffer[BUFFER];
   int row = 0, column = 0;
@@ -125,11 +135,11 @@ int ** parseMatrix(FILE * webfile, int size) {
 
   // allocate memory for 2D array
   // allocating row
-  webmatrix = (int **)malloc(size * size * sizeof(int));
+  webmatrix = (double **)malloc(size * size * sizeof(double));
 
   // allocating column for each row
   for (; row < size; row++) {
-    webmatrix[row] = (int *)malloc(size * sizeof(int));
+    webmatrix[row] = (double *)malloc(size * sizeof(double));
   }
 
   // copies web txt data to memory
