@@ -23,13 +23,16 @@
 /* Function prototypes */
 int getNumOfLinks(FILE * webfile);
 int charsInString(char * string, char sample);
+int ** parseMatrix(FILE * webfile, int size);
+void printMatrix(mxArray *matrix, int size);
+void printMatrixPt(int **matrix, int size);
 
 /* Main function */
 int main(void) {
   FILE *webfile       = NULL;
   Engine *ep          = NULL;
   mxArray *connectMat = NULL;
-  int **connectMatrix = NULL;
+  double **connectMatrix = NULL;
 
   int websize;
 
@@ -45,10 +48,7 @@ int main(void) {
     websize = getNumOfLinks(webfile);
 
     // parse to 2D array
-    parseMatrix(connectMatrix, websize);
-
-
-
+    connectMatrix = parseMatrix(webfile, websize);
 
   } else {
     fprintf(stderr, "Null file pointer error: %s\n", FILE_LOCATION);
@@ -66,6 +66,7 @@ int getNumOfLinks(FILE * webfile) {
 
   // read the first line
   fgets(line_buffer, BUFFER, webfile);
+  fseek(webfile, 0, SEEK_SET);
 
   // return length of line - total white space - 1
   return strlen(line_buffer) - charsInString(line_buffer, ' ') - 1;
@@ -95,7 +96,7 @@ int ** parseMatrix(FILE * webfile, int size) {
   // for reading file
   char line_buffer[BUFFER];
   int row = 0, column = 0;
-  int **webmatrix = NULL;
+  double **webmatrix = NULL;
 
   // allocate memory for 2D array
   // allocating row
@@ -107,13 +108,16 @@ int ** parseMatrix(FILE * webfile, int size) {
   }
 
   // copies web txt data to memory
+  row = 0;
   while (fgets(line_buffer, BUFFER, webfile)) {
     for (column = 0; column < size; column++) {
       // column * 2 to account for whitespace
-      webmatrix[row][column] = line_buffer[column * 2];
+      webmatrix[row][column] = line_buffer[column * 2] - '0';
     }
     row++;
   }
+
+  printMatrixPt(webmatrix, size);
 
   return webmatrix;
 }
@@ -121,13 +125,21 @@ int ** parseMatrix(FILE * webfile, int size) {
 /* Prints matrix
  * PARAM: the matrix in mxArray form of matlab
  */
-void printMatrix(mxArray *matrix) {
+void printMatrix(mxArray *matrix, int size) {
   size_t i, j;
-  printf("/                                    \\\n");
-  for(i = 0; i < 3; i++) {
-    printf("|");
-    for (j = 0; j < 3; j++) printf("%12.6f", mxGetPr(matrix)[i * 3 + j]);
-    printf("|\n");
+  for(i = 0; i < size; i++) {
+    for (j = 0; j < size; j++) printf("%-8.4f", mxGetPr(matrix)[i * size + j]);
+    printf("\n");
   }
-  printf("\\                                    /\n");
+}
+
+/* Prints matrix
+ * PARAM: the matrix in pointers
+ */
+void printMatrixPt(double **matrix, int size) {
+  unsigned short int i, j;
+  for (i = 0; i < size; i++) {
+    for (j = 0; j < size; j++) printf("%-8.4f", matrix[i][j]);
+    printf("\n");
+  }
 }
