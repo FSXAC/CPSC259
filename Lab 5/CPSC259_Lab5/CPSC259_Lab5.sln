@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
-MinimumVisualStudioVersion = 10.0.40219.1
+# Visual Studio 2012
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CPSC259_Lab5", "CPSC259_Lab5\CPSC259_Lab5.vcxproj", "{E7339B98-CB40-469F-871C-73CB5145D30A}"
 EndProject
 Global
@@ -15,6 +13,7 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{E7339B98-CB40-469F-871C-73CB5145D30A}.Debug|Win32.ActiveCfg = Debug|Win32
 		{E7339B98-CB40-469F-871C-73CB5145D30A}.Debug|Win32.Build.0 = Debug|Win32
+		{E7339B98-CB40-469F-871C-73CB5145D30A}.Debug|Win32.Deploy.0 = Debug|Win32
 		{E7339B98-CB40-469F-871C-73CB5145D30A}.Debug|x64.ActiveCfg = Debug|x64
 		{E7339B98-CB40-469F-871C-73CB5145D30A}.Debug|x64.Build.0 = Debug|x64
 		{E7339B98-CB40-469F-871C-73CB5145D30A}.Release|Win32.ActiveCfg = Release|Win32
