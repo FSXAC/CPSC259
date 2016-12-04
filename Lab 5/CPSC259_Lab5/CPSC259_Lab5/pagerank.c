@@ -25,16 +25,18 @@
 int getNumOfLinks(FILE * webfile);
 int charsInString(char * string, char sample);
 double ** parseMatrix(FILE * webfile, int size);
+double * parseMatrix_1D(FILE * webfile, int size);
 void printMatrix(mxArray *matrix, int size);
 void printMatrixPt(double **matrix, int size);
+void printMatrix_1D(double *matrix, int size);
 void rankpages(Engine * engPointer);
 
 /* Main function */
 int main(void) {
-  FILE *webfile          = NULL;
-  Engine *engPointer     = NULL;
-  mxArray *connectMat    = NULL;
-  double **connectMatrix = NULL;
+  FILE *webfile         = NULL;
+  Engine *engPointer    = NULL;
+  mxArray *connectMat   = NULL;
+  double *connectMatrix = NULL;
   int websize;
   double time[3][3] = {
     { 1.0, 2.0, 3.0 },
@@ -54,10 +56,10 @@ int main(void) {
     websize = getNumOfLinks(webfile);
 
     // parse to 2D array
-    connectMatrix = parseMatrix(webfile, websize);
+    connectMatrix = parseMatrix_1D(webfile, websize);
 
     // print initial connect matrix
-    printMatrixPt(connectMatrix, websize);
+    printMatrix_1D(connectMatrix, websize);
 
     // start matlab engine process
     if (!(engPointer = engOpen(NULL))) {
@@ -70,6 +72,7 @@ int main(void) {
 
     // copy connect matrix into a memory
     memcpy(mxGetPr(connectMat), connectMatrix, sq(websize) * sizeof(double));
+    printMatrix_1D(mxGetPr(connectMat), websize);
 
     // copy matrix into MATLAB engine
     if (engPutVariable(engPointer, "connectMat", connectMat)) {
@@ -260,7 +263,7 @@ void printMatrixPt(double **matrix, int size) {
 /* Prints matrix
  * PARAM: the matrix in pointers
  */
-void printMatrix1D(double *matrix, int size) {
+void printMatrix_1D(double *matrix, int size) {
   unsigned short int i, j;
   for (i = 0; i < size; i++) {
     for (j = 0; j < size; j++) printf("%-8.4f", matrix[i * size + j]);
