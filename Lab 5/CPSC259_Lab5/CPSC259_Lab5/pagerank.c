@@ -13,7 +13,8 @@
 #include "engine.h"
 
 /* Macros */
-#define END(x) system("pause"); return x
+#define end(x) system("pause"); return x
+#define sq(x) x * x
 
 /* Preprocessor constants */
 #define BUFFER 256
@@ -24,22 +25,29 @@
 int getNumOfLinks(FILE * webfile);
 int charsInString(char * string, char sample);
 double ** parseMatrix(FILE * webfile, int size);
+double * parseMatrix_1D(FILE * webfile, int size);
 void printMatrix(mxArray *matrix, int size);
 void printMatrixPt(double **matrix, int size);
+void printMatrix_1D(double *matrix, int size);
 void rankpages(Engine * engPointer);
 
 /* Main function */
 int main(void) {
-  FILE *webfile          = NULL;
-  Engine *engPointer     = NULL;
-  mxArray *connectMat    = NULL;
-  double **connectMatrix = NULL;
+  FILE *webfile         = NULL;
+  Engine *engPointer    = NULL;
+  mxArray *connectMat   = NULL;
+  double *connectMatrix = NULL;
   int websize;
+  double time[3][3] = {
+    { 1.0, 2.0, 3.0 },
+    { 4.0, 5.0, 6.0 },
+    { 7.0, 8.0, 9.0 }
+  };
 
   /* File read */
   if (fopen_s(&webfile, FILE_LOCATION, "r")) {
     fprintf(stderr, "Unable to open file: %s\n", FILE_LOCATION);
-    END(1);
+    end(1);
   }
 
   /* Need to read and parse data in file to an array */
@@ -48,31 +56,28 @@ int main(void) {
     websize = getNumOfLinks(webfile);
 
     // parse to 2D array
-    connectMatrix = parseMatrix(webfile, websize);
+    connectMatrix = parseMatrix_1D(webfile, websize);
 
     // print initial connect matrix
-    printMatrixPt(connectMatrix, websize);
+    printMatrix_1D(connectMatrix, websize);
 
     // start matlab engine process
     if (!(engPointer = engOpen(NULL))) {
       fprintf(stderr, "\nCannot start MATLAB engine\n");
-      END(1);
+      end(1);
     }
 
-    // create array
+    // create empty matrix with websize dimension
     connectMat = mxCreateDoubleMatrix(websize, websize, mxREAL);
 
     // copy connect matrix into a memory
-    memcpy(
-      (void *)mxGetPr(connectMat),
-      (void *)connectMatrix,
-      websize * websize * sizeof(double)
-    );
+    memcpy(mxGetPr(connectMat), connectMatrix, sq(websize) * sizeof(double));
+    printMatrix_1D(mxGetPr(connectMat), websize);
 
     // copy matrix into MATLAB engine
     if (engPutVariable(engPointer, "connectMat", connectMat)) {
       fprintf(stderr, "\nCannot write connect matrix to MATLAB\n");
-      END(1);
+      end(1);
     }
 
     // let MATLAB do its thing
@@ -87,10 +92,10 @@ int main(void) {
 
   } else {
     fprintf(stderr, "Null file pointer error: %s\n", FILE_LOCATION);
-    END(1);
+    end(1);
   }
 
-  END(0);
+  end(0);
 }
 
 void rankpages(Engine * engPointer) {
@@ -182,16 +187,16 @@ int charsInString(char * string, char sample) {
 double ** parseMatrix(FILE * webfile, int size) {
   // for reading file
   char line_buffer[BUFFER];
-  int row = 0, column = 0;
+  int row, column;
   double **webmatrix = NULL;
 
   // allocate memory for 2D array
   // allocating row
-  webmatrix = (double **)malloc(size * size * sizeof(double));
+  webmatrix = malloc(size * sizeof(double));
 
   // allocating column for each row
-  for (; row < size; row++) {
-    webmatrix[row] = (double *)malloc(size * sizeof(double));
+  for (row = 0; row < size; row++) {
+    webmatrix[row] = malloc(size * sizeof(double));
   }
 
   // copies web txt data to memory
@@ -200,6 +205,33 @@ double ** parseMatrix(FILE * webfile, int size) {
     for (column = 0; column < size; column++) {
       // column * 2 to account for whitespace
       webmatrix[row][column] = line_buffer[column * 2] - '0';
+    }
+    row++;
+  }
+  return webmatrix;
+}
+
+/* Returns a 1D pointer to the matrix of the parsed connect matrix
+ * PARAM: webfile - the file pointer to the file
+ * PARAM: size - size of matrix
+ * FILE(example):  0 0 1 1 0 1 1
+ *         index:  012345789ABCD
+ */
+double * parseMatrix_1D(FILE * webfile, int size) {
+  // for reading file
+  char line_buffer[BUFFER];
+  int row, column;
+  double *webmatrix = NULL;
+
+  // allocate memory for 1D array rep of 2D array
+  webmatrix = malloc(sq(size) * sizeof(double));
+
+  // copies web txt data to memory
+  row = 0;
+  while (fgets(line_buffer, BUFFER, webfile)) {
+    for (column = 0; column < size; column++) {
+      // column * 2 to account for whitespace
+      webmatrix[row * size + column] = line_buffer[column * 2] - '0';
     }
     row++;
   }
@@ -224,6 +256,17 @@ void printMatrixPt(double **matrix, int size) {
   unsigned short int i, j;
   for (i = 0; i < size; i++) {
     for (j = 0; j < size; j++) printf("%-8.4f", matrix[i][j]);
+    printf("\n");
+  }
+}
+
+/* Prints matrix
+ * PARAM: the matrix in pointers
+ */
+void printMatrix_1D(double *matrix, int size) {
+  unsigned short int i, j;
+  for (i = 0; i < size; i++) {
+    for (j = 0; j < size; j++) printf("%-8.4f", matrix[i * size + j]);
     printf("\n");
   }
 }
