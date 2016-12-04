@@ -28,7 +28,7 @@ double * parseMatrix(FILE * webfile, int size);
 void printMatrix(mxArray *matrix, int size);
 void printMatrixPtr(double *matrix, int size);
 void rankpages(Engine * engPointer);
-void printMatlab(char *name);
+void printResult(Engine * engPointer);
 
 /* Main function */
 int main(void) {
@@ -53,8 +53,8 @@ int main(void) {
     connectMatrix = parseMatrix(webfile, websize);
 
     // print initial connect matrix
-    printf("Connectivity Matrix:\n");
-    printMatrixPtr(connectMatrix, websize);
+    // printf("Connectivity Matrix:\n");
+    // printMatrixPtr(connectMatrix, websize);
 
     // start matlab engine process
     if (!(engPointer = engOpen(NULL))) {
@@ -78,7 +78,7 @@ int main(void) {
     rankpages(engPointer);
 
     // output the result
-    printMatlab("rank", engPointer);
+    printResult(engPointer);
 
     // close engine
     mxDestroyArray(connectMat);
@@ -98,8 +98,8 @@ int main(void) {
 }
 
 void rankpages(Engine * engPointer) {
-  // rows and columns
-  eval("[rows,columns] = size(connectMat)");
+  // transpose the matrix first
+  eval("connectMat = connectMat'");
 
   // get size of matrix
   eval("dimension = size(connectMat, 1);");
@@ -122,7 +122,7 @@ void rankpages(Engine * engPointer) {
   eval("[row, column] = find(columnsums == 0);");
 
   // finish up generating stochastic matrix
-  eval("stomat(: column) = 1 ./ dimension;");
+  eval("stoMat(:, column) = 1 ./ dimension;");
 
   // *** get transition matrix
   eval("Q = ones(dimension, dimension)");
@@ -217,18 +217,20 @@ void printMatrixPtr(double *matrix, int size) {
 
 /* retrieve vars from matlab and prints it
  */
-void printMatlab(char *name, Engine * engPointer) {
+void printResult(Engine * engPointer) {
   mxArray *result     = NULL;
   size_t sizeOfResult = 0;
   size_t i            = 0;
 
-  if ((result = engGetVariable(engPointer, name)) == NULL) {
-    fprintf(stderr, "failed to retrieve %s\n", name);
-    printf("failed to retrieve%s\n", name);
+  if ((result = engGetVariable(engPointer, "rank")) == NULL) {
+    fprintf(stderr, "failed to retrieve %s\n", "rank");
     return;
   } else {
     sizeOfResult = mxGetNumberOfElements(result);
-    printf("%s:\n", name);
-    while (i < sizeOfResult) printf("%f\n", mxGetPr(result)[i++]);
+    printf("NODE  RANK\n---   ----\n");
+    while (i < sizeOfResult) {
+      printf("%-5d ", i + 1);
+      printf("%.4f\n", mxGetPr(result)[i++]);
+    }
   }
 }
