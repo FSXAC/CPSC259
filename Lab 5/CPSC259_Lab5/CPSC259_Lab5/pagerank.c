@@ -13,7 +13,8 @@
 #include "engine.h"
 
 /* Macros */
-#define END(x) system("pause"); return x
+#define end(x) system("pause"); return x
+#define sq(x) x * x
 
 /* Preprocessor constants */
 #define BUFFER 256
@@ -35,11 +36,16 @@ int main(void) {
   mxArray *connectMat    = NULL;
   double **connectMatrix = NULL;
   int websize;
+  double time[3][3] = {
+    { 1.0, 2.0, 3.0 },
+    { 4.0, 5.0, 6.0 },
+    { 7.0, 8.0, 9.0 }
+  };
 
   /* File read */
   if (fopen_s(&webfile, FILE_LOCATION, "r")) {
     fprintf(stderr, "Unable to open file: %s\n", FILE_LOCATION);
-    END(1);
+    end(1);
   }
 
   /* Need to read and parse data in file to an array */
@@ -56,23 +62,19 @@ int main(void) {
     // start matlab engine process
     if (!(engPointer = engOpen(NULL))) {
       fprintf(stderr, "\nCannot start MATLAB engine\n");
-      END(1);
+      end(1);
     }
 
-    // create array
+    // create empty matrix with websize dimension
     connectMat = mxCreateDoubleMatrix(websize, websize, mxREAL);
 
     // copy connect matrix into a memory
-    memcpy(
-      (void *)mxGetPr(connectMat),
-      (void *)connectMatrix,
-      websize * websize * sizeof(double)
-    );
+    memcpy(mxGetPr(connectMat), connectMatrix, sq(websize) * sizeof(double));
 
     // copy matrix into MATLAB engine
     if (engPutVariable(engPointer, "connectMat", connectMat)) {
       fprintf(stderr, "\nCannot write connect matrix to MATLAB\n");
-      END(1);
+      end(1);
     }
 
     // let MATLAB do its thing
@@ -87,10 +89,10 @@ int main(void) {
 
   } else {
     fprintf(stderr, "Null file pointer error: %s\n", FILE_LOCATION);
-    END(1);
+    end(1);
   }
 
-  END(0);
+  end(0);
 }
 
 void rankpages(Engine * engPointer) {
@@ -182,16 +184,16 @@ int charsInString(char * string, char sample) {
 double ** parseMatrix(FILE * webfile, int size) {
   // for reading file
   char line_buffer[BUFFER];
-  int row = 0, column = 0;
+  int row, column;
   double **webmatrix = NULL;
 
   // allocate memory for 2D array
   // allocating row
-  webmatrix = (double **)malloc(size * size * sizeof(double));
+  webmatrix = malloc(size * sizeof(double));
 
   // allocating column for each row
-  for (; row < size; row++) {
-    webmatrix[row] = (double *)malloc(size * sizeof(double));
+  for (row = 0; row < size; row++) {
+    webmatrix[row] = malloc(size * sizeof(double));
   }
 
   // copies web txt data to memory
