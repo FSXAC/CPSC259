@@ -233,10 +233,13 @@ void printResult(Engine * engPointer) {
   size_t sizeOfResult = 0;
   size_t i            = 0;
 
+  // retrieve values
   if ((result = engGetVariable(engPointer, "rank")) == NULL) {
     fprintf(stderr, "failed to retrieve %s\n", "rank");
     return;
   } else {
+
+    // print out line by line
     sizeOfResult = mxGetNumberOfElements(result);
     printf("\n\nNODE  RANK\n---   ----\n");
     while (i < sizeOfResult) {
