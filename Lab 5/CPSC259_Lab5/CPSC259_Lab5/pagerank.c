@@ -19,19 +19,16 @@
 
 /* Preprocessor constants */
 #define BUFFER 256
-#define FBUFFER  128
 #define FILE_LOCATION "web.txt"
 
 /* Function prototypes */
 int getNumOfLinks(FILE * webfile);
 int charsInString(char * string, char sample);
-double ** parseMatrix(FILE * webfile, int size);
-double * parseMatrix_1D(FILE * webfile, int size);
+double * parseMatrix(FILE * webfile, int size);
 void printMatrix(mxArray *matrix, int size);
-void printMatrixPt(double **matrix, int size);
-void printMatrix_1D(double *matrix, int size);
+void printMatrixPtr(double *matrix, int size);
 void rankpages(Engine * engPointer);
-void printMat(char *name);
+void printMatlab(char *name);
 
 /* Main function */
 int main(void) {
@@ -40,11 +37,6 @@ int main(void) {
   mxArray *connectMat   = NULL;
   double *connectMatrix = NULL;
   int websize;
-  double time[3][3] = {
-    { 1.0, 2.0, 3.0 },
-    { 4.0, 5.0, 6.0 },
-    { 7.0, 8.0, 9.0 }
-  };
 
   /* File read */
   if (fopen_s(&webfile, FILE_LOCATION, "r")) {
@@ -58,10 +50,11 @@ int main(void) {
     websize = getNumOfLinks(webfile);
 
     // parse to 2D array
-    connectMatrix = parseMatrix_1D(webfile, websize);
+    connectMatrix = parseMatrix(webfile, websize);
 
     // print initial connect matrix
-    printMatrix_1D(connectMatrix, websize);
+    printf("Connectivity Matrix:\n");
+    printMatrixPtr(connectMatrix, websize);
 
     // start matlab engine process
     if (!(engPointer = engOpen(NULL))) {
@@ -74,8 +67,6 @@ int main(void) {
 
     // copy connect matrix into a memory
     memcpy(mxGetPr(connectMat), connectMatrix, sq(websize) * sizeof(double));
-    printf("mxGetPr:\n");
-    printMatrix_1D(mxGetPr(connectMat), websize);
 
     // copy matrix into MATLAB engine
     if (engPutVariable(engPointer, "connectMat", connectMat)) {
@@ -86,47 +77,55 @@ int main(void) {
     // let MATLAB do its thing
     rankpages(engPointer);
 
+    // output the result
+    printMatlab("rank", engPointer);
+
     // close engine
     mxDestroyArray(connectMat);
     connectMat = NULL;
     if (engClose(engPointer)) {
       fprintf(stderr, "\nFailed to close MATLAB engine\n");
     }
-
   } else {
-    fprintf(stderr, "Null file pointer error: %s\n", FILE_LOCATION);
+    fprintf(stderr, "Cannot open file: %s\n", FILE_LOCATION);
     end(1);
   }
+
+  // close file
+  fclose(webfile);
 
   end(0);
 }
 
 void rankpages(Engine * engPointer) {
+  // rows and columns
+  eval("[rows,columns] = size(connectMat)");
+
   // get size of matrix
   eval("dimension = size(connectMat, 1);");
 
   // get column sum
-  eval("columnSum = sum(connectMat, 1);");
+  eval("columnsums = sum(connectMat, 1);");
   eval("p = 0.85;");
 
   // *** get stochastic matrix
   // find non zero matrices
-  eval("zerocolumns = find(solumnsums ~= 0);");
+  eval("zerocolumns = find(columnsums ~= 0);");
 
   // generate sparse matrix with diagonal == inverse of each column sum
-  eval("D = sparse(zerocolumns, zerocolumns, 1./columnSum(zerocolumns), dimension, dimension);");
+  eval("D = sparse(zerocolumns, zerocolumns, 1./columnsums(zerocolumns), dimension, dimension);");
 
   // multiply connectivity matrix with sparse matrix
   eval("stoMat = connectMat * D");
 
   // find zero clolumns of original connectivity matrix
-  eval("[row, column] = find(columnSum == 0);");
+  eval("[row, column] = find(columnsums == 0);");
 
   // finish up generating stochastic matrix
   eval("stomat(: column) = 1 ./ dimension;");
 
   // *** get transition matrix
-  eval("Q = ones(dimension)");
+  eval("Q = ones(dimension, dimension)");
   eval("transMat = p * stoMat + (1 - p) * (Q / dimension);");
 
   // get pagerank matrix
@@ -137,8 +136,6 @@ void rankpages(Engine * engPointer) {
 
   // normalize
   eval("rank = rank / sum(rank)");
-
-  printMat("rank", engPointer);
 }
 
 /* Returns number of links in the connectivity matrix (dimension)
@@ -169,46 +166,13 @@ int charsInString(char * string, char sample) {
   return count;
 }
 
-/* Returns a 2D pointer to the matrix of the parsed connect matrix
- * PARAM: webfile - the file pointer to the file
- * PARAM: size - size of matrix
- * FILE(example):  0 0 1 1 0 1 1
- *         index:  012345789ABCD
- */
-double ** parseMatrix(FILE * webfile, int size) {
-  // for reading file
-  char line_buffer[BUFFER];
-  int row, column;
-  double **webmatrix = NULL;
-
-  // allocate memory for 2D array
-  // allocating row
-  webmatrix = malloc(size * sizeof(double));
-
-  // allocating column for each row
-  for (row = 0; row < size; row++) {
-    webmatrix[row] = malloc(size * sizeof(double));
-  }
-
-  // copies web txt data to memory
-  row = 0;
-  while (fgets(line_buffer, BUFFER, webfile)) {
-    for (column = 0; column < size; column++) {
-      // column * 2 to account for whitespace
-      webmatrix[row][column] = line_buffer[column * 2] - '0';
-    }
-    row++;
-  }
-  return webmatrix;
-}
-
 /* Returns a 1D pointer to the matrix of the parsed connect matrix
  * PARAM: webfile - the file pointer to the file
  * PARAM: size - size of matrix
  * FILE(example):  0 0 1 1 0 1 1
  *         index:  012345789ABCD
  */
-double * parseMatrix_1D(FILE * webfile, int size) {
+double * parseMatrix(FILE * webfile, int size) {
   // for reading file
   char line_buffer[BUFFER];
   int row, column;
@@ -243,18 +207,7 @@ void printMatrix(mxArray *matrix, int size) {
 /* Prints matrix
  * PARAM: the matrix in pointers
  */
-void printMatrixPt(double **matrix, int size) {
-  unsigned short int i, j;
-  for (i = 0; i < size; i++) {
-    for (j = 0; j < size; j++) printf("%-8.4f", matrix[i][j]);
-    printf("\n");
-  }
-}
-
-/* Prints matrix
- * PARAM: the matrix in pointers
- */
-void printMatrix_1D(double *matrix, int size) {
+void printMatrixPtr(double *matrix, int size) {
   unsigned short int i, j;
   for (i = 0; i < size; i++) {
     for (j = 0; j < size; j++) printf("%-8.4f", matrix[i * size + j]);
@@ -264,7 +217,7 @@ void printMatrix_1D(double *matrix, int size) {
 
 /* retrieve vars from matlab and prints it
  */
-void printMat(char *name, Engine * engPointer) {
+void printMatlab(char *name, Engine * engPointer) {
   mxArray *result     = NULL;
   size_t sizeOfResult = 0;
   size_t i            = 0;
