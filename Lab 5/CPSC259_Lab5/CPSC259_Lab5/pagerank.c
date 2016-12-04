@@ -15,6 +15,7 @@
 /* Macros */
 #define end(x) system("pause"); return x
 #define sq(x) x * x
+#define eval(str) if (engEvalString(engPointer, str)) fprintf(stderr, "%s\n", "matlab error")
 
 /* Preprocessor constants */
 #define BUFFER 256
@@ -30,6 +31,7 @@ void printMatrix(mxArray *matrix, int size);
 void printMatrixPt(double **matrix, int size);
 void printMatrix_1D(double *matrix, int size);
 void rankpages(Engine * engPointer);
+void printMat(char *name);
 
 /* Main function */
 int main(void) {
@@ -72,6 +74,7 @@ int main(void) {
 
     // copy connect matrix into a memory
     memcpy(mxGetPr(connectMat), connectMatrix, sq(websize) * sizeof(double));
+    printf("mxGetPr:\n");
     printMatrix_1D(mxGetPr(connectMat), websize);
 
     // copy matrix into MATLAB engine
@@ -99,55 +102,43 @@ int main(void) {
 }
 
 void rankpages(Engine * engPointer) {
-  mxArray *result = NULL;
-
   // get size of matrix
-  engEvalString(engPointer, "dimension = size(connectMat, 1);");
+  eval("dimension = size(connectMat, 1);");
 
   // get column sum
-  engEvalString(engPointer, "columnSum = sum(connectMat, 1);");
-  engEvalString(engPointer, "p = 0.85;");
+  eval("columnSum = sum(connectMat, 1);");
+  eval("p = 0.85;");
 
   // *** get stochastic matrix
   // find non zero matrices
-  engEvalString(engPointer, "zerocolumns = find(solumnsums ~= 0);");
+  eval("zerocolumns = find(solumnsums ~= 0);");
 
   // generate sparse matrix with diagonal == inverse of each column sum
-  engEvalString(engPointer, "D = sparse(zerocolumns, zerocolumns, 1./columnSum(zerocolumns), dimension, dimension);");
+  eval("D = sparse(zerocolumns, zerocolumns, 1./columnSum(zerocolumns), dimension, dimension);");
 
   // multiply connectivity matrix with sparse matrix
-  engEvalString(engPointer, "stoMat = connectMat * D");
+  eval("stoMat = connectMat * D");
 
   // find zero clolumns of original connectivity matrix
-  engEvalString(engPointer, "[row, column] = find(columnSum == 0);");
+  eval("[row, column] = find(columnSum == 0);");
 
   // finish up generating stochastic matrix
-  engEvalString(engPointer, "stomat(: column) = 1 ./ dimension;");
+  eval("stomat(: column) = 1 ./ dimension;");
 
   // *** get transition matrix
-  engEvalString(engPointer, "Q = ones(dimension)");
-  engEvalString(engPointer, "transMat = p * stoMat + (1 - p) * (Q / dimension);");
+  eval("Q = ones(dimension)");
+  eval("transMat = p * stoMat + (1 - p) * (Q / dimension);");
 
   // get pagerank matrix
-  engEvalString(engPointer, "rank = ones(dimension, 1);");
+  eval("rank = ones(dimension, 1);");
 
   // multiply until rank remains constant
-  engEvalString(engPointer, "for i = 1:100 rank = transMat * rank; end");
+  eval("for i = 1:100 rank = transMat * rank; end");
 
   // normalize
-  engEvalString(engPointer, "rank = rank / sum(rank)");
+  eval("rank = rank / sum(rank)");
 
-
-  /* using the enginegetvariable to retrieve the eigenvector */
-  if((result = engGetVariable(engPointer,"rank")) == NULL){
-    fprintf(stderr,"\nFail to retrieve eigenvalue vector\n");
-    return;
-  } else {
-    size_t sizeOfResult = mxGetNumberOfElements(result);
-    size_t i            = 0;
-    printf("The ranks are:\n");
-    for(i = 0; i < sizeOfResult; i++) printf("%f\n", mxGetPr(result)[i]);
-  }
+  printMat("rank", engPointer);
 }
 
 /* Returns number of links in the connectivity matrix (dimension)
@@ -268,5 +259,23 @@ void printMatrix_1D(double *matrix, int size) {
   for (i = 0; i < size; i++) {
     for (j = 0; j < size; j++) printf("%-8.4f", matrix[i * size + j]);
     printf("\n");
+  }
+}
+
+/* retrieve vars from matlab and prints it
+ */
+void printMat(char *name, Engine * engPointer) {
+  mxArray *result     = NULL;
+  size_t sizeOfResult = 0;
+  size_t i            = 0;
+
+  if ((result = engGetVariable(engPointer, name)) == NULL) {
+    fprintf(stderr, "failed to retrieve %s\n", name);
+    printf("failed to retrieve%s\n", name);
+    return;
+  } else {
+    sizeOfResult = mxGetNumberOfElements(result);
+    printf("%s:\n", name);
+    while (i < sizeOfResult) printf("%f\n", mxGetPr(result)[i++]);
   }
 }

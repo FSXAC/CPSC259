@@ -94,7 +94,12 @@ int main(void) {
   matTwo = mxCreateDoubleMatrix(3, 3, mxREAL);
 
   /* Assign values into empty matrix */
-  memcpy((void *) mxGetPr(matOne), (void *)matrixOne, 9 * sizeof(double));
+  memcpy(
+    (void *)mxGetPr(matOne),
+    (void *)matrixOne,
+    9 * sizeof(double)
+  );
+
   memcpy((void *) mxGetPr(matTwo), (void *)matrixTwo, 9 * sizeof(double));
 
   /* Display current matrix */
