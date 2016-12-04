@@ -208,6 +208,33 @@ double ** parseMatrix(FILE * webfile, int size) {
   return webmatrix;
 }
 
+/* Returns a 1D pointer to the matrix of the parsed connect matrix
+ * PARAM: webfile - the file pointer to the file
+ * PARAM: size - size of matrix
+ * FILE(example):  0 0 1 1 0 1 1
+ *         index:  012345789ABCD
+ */
+double * parseMatrix_1D(FILE * webfile, int size) {
+  // for reading file
+  char line_buffer[BUFFER];
+  int row, column;
+  double *webmatrix = NULL;
+
+  // allocate memory for 1D array rep of 2D array
+  webmatrix = malloc(sq(size) * sizeof(double));
+
+  // copies web txt data to memory
+  row = 0;
+  while (fgets(line_buffer, BUFFER, webfile)) {
+    for (column = 0; column < size; column++) {
+      // column * 2 to account for whitespace
+      webmatrix[row * size + column] = line_buffer[column * 2] - '0';
+    }
+    row++;
+  }
+  return webmatrix;
+}
+
 /* Prints matrix
  * PARAM: the matrix in mxArray form of matlab
  */
@@ -226,6 +253,17 @@ void printMatrixPt(double **matrix, int size) {
   unsigned short int i, j;
   for (i = 0; i < size; i++) {
     for (j = 0; j < size; j++) printf("%-8.4f", matrix[i][j]);
+    printf("\n");
+  }
+}
+
+/* Prints matrix
+ * PARAM: the matrix in pointers
+ */
+void printMatrix1D(double *matrix, int size) {
+  unsigned short int i, j;
+  for (i = 0; i < size; i++) {
+    for (j = 0; j < size; j++) printf("%-8.4f", matrix[i * size + j]);
     printf("\n");
   }
 }
