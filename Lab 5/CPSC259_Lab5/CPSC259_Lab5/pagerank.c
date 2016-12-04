@@ -39,30 +39,38 @@ int main(void) {
   int websize;
 
   /* File read */
+  printf("Opening file to import...");
   if (fopen_s(&webfile, FILE_LOCATION, "r")) {
     fprintf(stderr, "Unable to open file: %s\n", FILE_LOCATION);
     end(1);
   }
+  printf("Done\n");
 
   /* Need to read and parse data in file to an array */
   if (webfile) {
     // get size of matrix
+    printf("Analysing number of web links...");
     websize = getNumOfLinks(webfile);
+    if (websize <= 0) {
+      printf("\nError: invalid number of web links\n");
+      end(1);
+    } else printf("Done\n");
 
     // parse to 2D array
+    printf("Parsing matrix to memory...");
     connectMatrix = parseMatrix(webfile, websize);
-
-    // print initial connect matrix
-    // printf("Connectivity Matrix:\n");
-    // printMatrixPtr(connectMatrix, websize);
+    printf("Done\n");
 
     // start matlab engine process
+    printf("Starting MATLAB engine...");
     if (!(engPointer = engOpen(NULL))) {
       fprintf(stderr, "\nCannot start MATLAB engine\n");
       end(1);
     }
+    printf("Done\n");
 
     // create empty matrix with websize dimension
+    printf("Inserting matrix into MATLAB...");
     connectMat = mxCreateDoubleMatrix(websize, websize, mxREAL);
 
     // copy connect matrix into a memory
@@ -73,9 +81,12 @@ int main(void) {
       fprintf(stderr, "\nCannot write connect matrix to MATLAB\n");
       end(1);
     }
+    printf("Done\n");
 
     // let MATLAB do its thing
+    printf("Calculating...");
     rankpages(engPointer);
+    printf("Done\n");
 
     // output the result
     printResult(engPointer);
@@ -227,7 +238,7 @@ void printResult(Engine * engPointer) {
     return;
   } else {
     sizeOfResult = mxGetNumberOfElements(result);
-    printf("NODE  RANK\n---   ----\n");
+    printf("\n\nNODE  RANK\n---   ----\n");
     while (i < sizeOfResult) {
       printf("%-5d ", i + 1);
       printf("%.4f\n", mxGetPr(result)[i++]);
