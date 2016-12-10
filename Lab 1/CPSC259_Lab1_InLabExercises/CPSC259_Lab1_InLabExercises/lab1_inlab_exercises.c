@@ -6,14 +6,14 @@
  CS Accounts:		a1a1 and b2b2
  Date:				Add the date here
  */
- 
+
 /* Preprocessor directives */
 #include "lab1_inlab_exercises.h"
 #include <stdlib.h> // For system command
 
 /*
  Try to avoid using numbers in code.  Programmers will often call
- numbers in your code 'magic numbers'.  We avoid using magic numbers 
+ numbers in your code 'magic numbers'.  We avoid using magic numbers
  because it is easier to debug code that doesn't use them.
  Define and use a constant like this instead: #define CONSTANT_NAME value
  */
@@ -54,7 +54,7 @@ int main (void)
  RETURN: N/A
  */
 void reverse_array(int array[], int length) {
-	
+
 	// Implement this function here
 	int temp;
 	int index = 0;
@@ -112,7 +112,7 @@ int count_letters(const char string[], char letter)
 
 /*
  Determines if a string is a palindrome.  Skips spaces.
- For example, 
+ For example,
  ""     -> returns 1 (an empty string is a palindrome)
  "the"  -> returns 0
  "abba" -> returns 1
