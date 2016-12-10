@@ -44,7 +44,7 @@ int main(void) {
     fprintf(stderr, "Unable to open file: %s\n", FILE_LOCATION);
     end(1);
   }
-  printf("Done\n");
+  printf("OK\n");
 
   /* Need to read and parse data in file to an array */
   if (webfile) {
@@ -54,12 +54,12 @@ int main(void) {
     if (websize <= 0) {
       printf("\nError: invalid number of web links\n");
       end(1);
-    } else printf("Done\n");
+    } else printf("%d links detected\n", websize);
 
     // parse to 2D array
     printf("Parsing matrix to memory...");
     connectMatrix = parseMatrix(webfile, websize);
-    printf("Done\n");
+    printf("OK\n");
 
     // start matlab engine process
     printf("Starting MATLAB engine...");
@@ -67,7 +67,7 @@ int main(void) {
       fprintf(stderr, "\nCannot start MATLAB engine\n");
       end(1);
     }
-    printf("Done\n");
+    printf("OK\n");
 
     // create empty matrix with websize dimension
     printf("Inserting matrix into MATLAB...");
@@ -81,12 +81,12 @@ int main(void) {
       fprintf(stderr, "\nCannot write connect matrix to MATLAB\n");
       end(1);
     }
-    printf("Done\n");
+    printf("OK\n");
 
     // let MATLAB do its thing
     printf("Calculating...");
     rankpages(engPointer);
-    printf("Done\n");
+    printf("OK\n");
 
     // output the result
     printResult(engPointer);
