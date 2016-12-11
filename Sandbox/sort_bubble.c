@@ -14,7 +14,7 @@ void bubbleSort(int *data, int size) {
   for (i = 0; (i <= size) && flag; i++) {
     flag = 0;
 
-    for (j = 0; j < n - 1; j++) {
+    for (j = 0; j < size - 1; j++) {
       if (data[j] > data[j + 1]) {
         // if swap if left is > right
         swap(&data[j], &data[j + 1]);
