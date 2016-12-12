@@ -21,7 +21,9 @@
 
 // Q6
 // - using prime number as sizes
-// - numbers are placed as far as from each other
+// - numbers are placed as far as from each other (spread evenly)
+// - should fill up the sapce
+// - 
 
 // Q7
 
