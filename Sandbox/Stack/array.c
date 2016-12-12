@@ -9,10 +9,18 @@ int sum_elements_with_size(int a[], int size){
   return sum;
 }
 
+<<<<<<< HEAD
 int sum_elements_without_size(int a[]){
   int i    = 0;
   int sum  = 0;
   int size = sizeof(a)/sizeof(a[0]);
+=======
+// this should work but doesnt
+int sum_elements_without_size(int a[]){
+  int i    = 0;
+  int sum  = 0;
+  int size = sizeof(a) / sizeof(a[0]);
+>>>>>>> 521fac96ef5ff15ab88785f8a3d95bf21323e484
   for(i = 0; i < size; i++)
     sum += a[i];
   return sum;

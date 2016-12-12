@@ -40,7 +40,7 @@ int main(void) {
 typedef struct stack{
   // top is the index of the top most element
   int top;
-  int * list;
+  int *list;
 } Stack;
 
 void initialize(Stack * stack) {
@@ -50,7 +50,7 @@ void initialize(Stack * stack) {
   stack->list = (int *)malloc(sizeof(int) * 10);
 }
 
-int isEmtpy(Stack * stack) {
+int isEmpty(Stack * stack) {
   // when the index is less than 0
   return (stack->top == -1);
 }
@@ -80,7 +80,7 @@ int peek(Stack * stack) {
   if (!isEmpty(stack)) {
     return stack->list[stack->top];
   } else {
-    return NULL;
+    return 0;
   }
 }
 
@@ -96,6 +96,6 @@ int pop(Stack * stack) {
     stack->top--;
     return popval;
   } else {
-    return NULL;
+    return 0;
   }
 }

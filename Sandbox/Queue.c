@@ -8,64 +8,86 @@
 
 #define MAX_HOLD 10
 
-// TODO: add implementation of CIRCULAR ARRAYS
-
 // queue
 typedef struct {
   int front;
   int back;
-  int * list;
+  int *list;
 } Queue;
 
 // to initialize the queue
-void qinit(Queue * q) {
-  q->front = 0;
-  q->back = 0;
-  q->list = (int * ) malloc(sizeof(int) * MAX_HOLD);
+Queue * createQueue() {
+  Queue *newQueue = (Queue *)malloc(sizeof(Queue));
+  newQueue->front = 0;
+  newQueue->back  = 0;
+  newQueue->list  = (int *)malloc(sizeof(int) * MAX_HOLD);
+  return newQueue;
+}
+
+// check if queue is emptty
+int isEmpty(Queue *q) {
+  return (q->front == q->back);
+}
+
+int isFull(Queue *q) {
+  return (q->front == (q->back + 1) % MAX_HOLD);
+}
+
+// enqueue - add element to the end of the queue, shift the back variable by 1
+void enqueue(Queue *q, int value) {
+  // check if the queue is full
+  if (isFull(q)) return;
+
+  // enqueueueue and incrememnt pointer (if at end, move to beginning)
+  q->list[q->back] = value;
+  if (++(q->back) == MAX_HOLD) q->back = 0;
+}
+
+// Dequeue - remove the first element from the head of the queue, shift front variable by 1
+int dequeue(Queue *q) {
+  // check if it's empty first
+  if (isEmpty(q)) return 0;
+
+  int data = q->list[q->front];
+
+  // dequeue and increment front pointer
+  if (++(q->front) == MAX_HOLD) q->front = 0;
+  return data;
+}
+
+void printQueue(Queue *q) {
+  if (isEmpty(q)) {
+    printf("<empty queue>\n");
+    return;
+  }
+
+  printf("[");
+  for (int i = q->front; i < q->back; i++) {
+    printf(" %d,", q->list[i]);
+  }
+
+  printf("\b ]\n");
 }
 
 int main(void) {
   // array representation of Queues
   // every queue has front and back var that points to th eposition from where deletion and
   // insertion can be done
-  Queue * newQ = NULL;
-  qinit(newQ);
+  Queue *newQ = createQueue();
 
   // to enqueue
   enqueue(newQ, 4);
+  printQueue(newQ);
+  enqueue(newQ, 2);
+  printQueue(newQ);
+  enqueue(newQ, 7);
+  printQueue(newQ);
+  enqueue(newQ, 16);
+  printQueue(newQ);
 
   // to dequeue
-  dequeue(newQ);
+  printf("dequeued: %d\n", dequeue(newQ));
+  printQueue(newQ);
 
   return 0;
 }
-
-// check if queue is emptty
-int isQEmpty(Queue * q) {
-  return (q->front == q->back);
-}
-
-int isFull(Queue * q) {
-  return (MAX_HOLD % (q->back - q->front) == 0);
-}
-
-// enqueue - add element to the end of the queue, shift the back variable by 1
-int enqueue(Queue * q, int value) {
-  // check if the queue is full
-  if (!isFull(q)) {
-    q->list[q->back++] = value;
-    return 1;
-  } else return 0;
-}
-
-// Dequeue - remove the first element from the head of the queue, shift front variable by 1
-int dequeue(Queue * q) {
-  // check if the queue is empty
-  if (isEmpty(q));
-}
-
-// Queues using linked list
-// the START pointer of the linked list is used as FRONT
-// REAR stroes the address of the last element in the queue
-// All insertions are done at rear, all deletions done at FRONT
-// if FRONT == REAR ==> NULL, empty queue
