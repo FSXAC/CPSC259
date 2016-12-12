@@ -21,7 +21,7 @@ typedef struct {
 void qinit(Queue * q) {
   q->front = 0;
   q->back = 0;
-  q->list = (int * ) malloc(sizeof(int) * MAXHOLD);
+  q->list = (int * ) malloc(sizeof(int) * MAX_HOLD);
 }
 
 int main(void) {
@@ -35,22 +35,22 @@ int main(void) {
   enqueue(newQ, 4);
 
   // to dequeue
-  dequeue(newQ)
+  dequeue(newQ);
 
-  reutrn 0;
+  return 0;
 }
 
 // check if queue is emptty
 int isQEmpty(Queue * q) {
-  return (queue->front == queue->back);
+  return (q->front == q->back);
 }
 
 int isFull(Queue * q) {
-  return (MAXHOLD % (queue->back - queue->front) == 0);
+  return (MAX_HOLD % (q->back - q->front) == 0);
 }
 
 // enqueue - add element to the end of the queue, shift the back variable by 1
-int enqueue(Queue * q int value) {
+int enqueue(Queue * q, int value) {
   // check if the queue is full
   if (!isFull(q)) {
     q->list[q->back++] = value;
@@ -61,7 +61,7 @@ int enqueue(Queue * q int value) {
 // Dequeue - remove the first element from the head of the queue, shift front variable by 1
 int dequeue(Queue * q) {
   // check if the queue is empty
-  if (isEmpty(q))
+  if (isEmpty(q));
 }
 
 // Queues using linked list
