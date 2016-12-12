@@ -45,4 +45,32 @@ int length(struct node *start) {
   return 1 + length(start->next);
 }
 
-// Q5
+// Q5 - doubly linked list
+struct node {
+  int item;
+  struct node *next;
+  struct node *prev;
+};
+
+struct * concat(struct node *list1, struct node *list2) {
+  // check for conditions
+  if (!list1 && !list2) return NULL;
+  else if (!list1) return list2;
+  else if (!list2) return list1;
+
+  // both lists are valid
+  // navigate to the end of the first list
+  struct node *current = list1;
+  while (!current->next) current = current->next;
+
+  // connect the two together
+  current->next = list2;
+  list2->prev   = current;
+
+  return list1;
+}
+
+// Q6
+// single linked list is fine as long as there is a pointer for the last element
+
+// Q7
